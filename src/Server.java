@@ -69,9 +69,18 @@ public class Server {
 
     }//close main()
 
-    public void send(String message){
-        pwrite.println("Player 1: " + message);
+    public void send(String signal, String message){
+
+        if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_CHAT)){
+            //send a chat message
+            //send chat signal then chat message itself
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_CHAT);
+            pwrite.flush();
+            pwrite.println("Player 1: " + message);
+        }
+
         pwrite.flush();
-    }
+
+    }//close send()
 }
 

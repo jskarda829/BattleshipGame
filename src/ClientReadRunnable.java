@@ -27,10 +27,33 @@ public class ClientReadRunnable implements Runnable {
         while (true){
 
             try {
-
+                //read the signal
                 if((receiveMessage = bufferedReader.readLine()) != null)
                 {
-                    textBox.append(receiveMessage + '\n');
+
+                    //server has read a socket code, need check what code it is
+                    if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_CHAT)){
+
+                        System.out.println("message is inconming");
+
+                        //now know that a chat message is coming
+                        try {
+                            if((receiveMessage = bufferedReader.readLine()) != null)
+                            {
+                                //now recieved the message, need print it to screen
+                                textBox.append(receiveMessage + '\n');
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }else{
+
+                        System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage + " signal: " + SocketSignals.BATTLESHIP_SIGNAL_CHAT);
+                    }
+
+                   // textBox.append(receiveMessage + '\n');
                     //System.out.println("The server says: " + receiveMessage);
                 }
 
