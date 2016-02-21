@@ -7,7 +7,7 @@ import java.io.IOException;
  */
 public class ClientReadRunnable implements Runnable {
 
-    //vars
+    //vars test
     BufferedReader bufferedReader;
     JTextArea textBox;
 
