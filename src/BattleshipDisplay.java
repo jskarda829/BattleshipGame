@@ -14,6 +14,8 @@ public class BattleshipDisplay extends JFrame {
     boolean isClient;
     public Server server;
     public Client client;
+    public BattleshipGrid topGrid;
+    public BattleshipGrid bottomGrid;
 
     public BattleshipDisplay() {
         initUI();
@@ -44,7 +46,6 @@ public class BattleshipDisplay extends JFrame {
                 }
             }
         });
-
         add(IPAddress);
         add(hostButton);
         add(clientButton);
@@ -62,29 +63,33 @@ public class BattleshipDisplay extends JFrame {
         remove(clientButton);
 
         //Instantiate components
+        topGrid = new BattleshipGrid();
+        bottomGrid = new BattleshipGrid();
         JButton sendButton = new JButton("Send");
         JTextField enterText = new JTextField("Enter message");
         JTextArea messageBox = new JTextArea();
         //Set behavior of the messagebox/scrollpane
         messageBox.setEditable(false);
-        JScrollPane j = new JScrollPane(messageBox);
-        j.setBounds(50, 600, 640, 100);
-        j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollableMessageBox = new JScrollPane(messageBox);
+        scrollableMessageBox.setBounds(50, 600, 640, 100);
+        scrollableMessageBox.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollableMessageBox.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         //set behavior of the text box for typing messages
         enterText.setBounds(50, 720, 640, 20);
         enterText.setFocusable(true);
         enterText.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+            }
+
             @Override
             public void keyPressed(KeyEvent e) {
 
                 int key = e.getKeyCode();
-                if(key == KeyEvent.VK_ENTER){
+                if (key == KeyEvent.VK_ENTER) {
                     String text = enterText.getText();
                     if (!text.equals("")) {
-                        if(isClient){
+                        if (isClient) {
                             client.send(text);
                             messageBox.append("Player 2: " + text + '\n');
                         } else {
@@ -96,8 +101,10 @@ public class BattleshipDisplay extends JFrame {
                     }
                 }
             }
+
             @Override
-            public void keyReleased(KeyEvent e) {}
+            public void keyReleased(KeyEvent e) {
+            }
         });
         sendButton.setBounds(700, 720, 80, 20);
         sendButton.addActionListener(new ActionListener() {
@@ -105,7 +112,7 @@ public class BattleshipDisplay extends JFrame {
             public void actionPerformed(ActionEvent event) {
                 String text = enterText.getText();
                 if (!text.equals("")) {
-                    if(isClient){
+                    if (isClient) {
                         client.send(text);
                         messageBox.append("Player 2: " + text + '\n');
                     } else {
@@ -117,9 +124,19 @@ public class BattleshipDisplay extends JFrame {
                 }
             }
         });
+        //set behavior for the grid
+        topGrid.setLocation(50, 50);
+        bottomGrid.setLocation(50, 475);
+
+        add(topGrid);
+        add(bottomGrid);
+
+        System.out.println(topGrid.isVisible());
+        System.out.println(topGrid.isDisplayable());
+        System.out.println(topGrid.getX());
         add(sendButton);
         add(enterText);
-        add(j);
+        add(scrollableMessageBox);
         if(isClient){
             client = new Client(messageBox);
             try {
