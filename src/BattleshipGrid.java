@@ -91,7 +91,7 @@ public class BattleshipGrid extends JPanel {
     public class CellPane extends JLabel {
 
         private Color defaultBackground = Color.BLACK;
-        private boolean isClicked;
+        private boolean isClicked = false;
         private boolean isShipHere;
         public CellPane() {
             setOpaque(true);
@@ -110,11 +110,15 @@ public class BattleshipGrid extends JPanel {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(35, 35);
+            return new Dimension(50, 50);
         }
 
         public boolean getIsClicked(){
             return isClicked;
+        }
+
+        public void setClicked(boolean trueFalse){
+            isClicked = trueFalse;
         }
     }
 
