@@ -29,9 +29,9 @@ public class BattleshipDisplay extends JFrame {
 
         setLayout(null);
         IPAddress = new JTextField();
-        IPAddress.setBounds(250, 100, 250, 50);
+        IPAddress.setBounds(575, 100, 250, 50);
         hostButton = new JButton("Host Game");
-        hostButton.setBounds(250, 170, 125, 50);
+        hostButton.setBounds(575, 170, 125, 50);
         hostButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -40,7 +40,7 @@ public class BattleshipDisplay extends JFrame {
             }
         });
         clientButton = new JButton("Join Game");
-        clientButton.setBounds(375, 170, 125, 50);
+        clientButton.setBounds(700, 170, 125, 50);
         clientButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -57,9 +57,9 @@ public class BattleshipDisplay extends JFrame {
         add(hostButton);
         add(clientButton);
         setTitle("Battleship");
-        setSize(800, 800);
-        setMaximumSize(new Dimension(800, 800));
-        setMinimumSize(new Dimension(800, 800));
+        setSize(1400, 800);
+        setMaximumSize(new Dimension(1400, 800));
+        setMinimumSize(new Dimension(1400, 800));
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -73,23 +73,20 @@ public class BattleshipDisplay extends JFrame {
        // bfgBottom = new BattleshipGrid();
         //bfgBottom.setLocation(0, 0);
         bfgBottom = new BattleshipGrid();
-        bfgBottom.setBounds(400, 170, 350,350);
-        add(bfgBottom);
-        System.out.println(bfgBottom.isVisible());
-        System.out.println(bfgBottom.isOpaque());
+        bfgBottom.setBounds(700, 15, 500,500);
         bfgTop = new BattleshipGrid();
-        bfgTop.setLocation(225, 15);
+        bfgTop.setBounds(100, 15, 500, 500);
         sendButton = new JButton("Send");
         enterText = new JTextField("Enter message");
         messageBox = new JTextArea();
         //Set behavior of the messagebox/scrollpane
         messageBox.setEditable(false);
         JScrollPane j = new JScrollPane(messageBox);
-        j.setBounds(50, 600, 640, 100);
+        j.setBounds(150, 600, 1000, 100);
         j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         //set behavior of the text box for typing messages
-        enterText.setBounds(50, 720, 640, 20);
+        enterText.setBounds(150, 720, 930, 20);
         enterText.setFocusable(true);
         enterText.addKeyListener(new KeyListener() {
             @Override
@@ -120,7 +117,7 @@ public class BattleshipDisplay extends JFrame {
             public void keyReleased(KeyEvent e) {
             }
         });
-        sendButton.setBounds(700, 720, 80, 20);
+        sendButton.setBounds(1080, 720, 80, 20);
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
