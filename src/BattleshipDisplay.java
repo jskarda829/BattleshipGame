@@ -85,10 +85,10 @@ public class BattleshipDisplay extends JFrame {
                     String text = enterText.getText();
                     if (!text.equals("")) {
                         if(isClient){
-                            client.send(text);
+                            client.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
                             messageBox.append("Player 2: " + text + '\n');
                         } else {
-                            server.send(text);
+                            server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
                             messageBox.append("Player 1: " + text + '\n');
                         }
                         //messageBox.append(text + '\n');
@@ -106,10 +106,10 @@ public class BattleshipDisplay extends JFrame {
                 String text = enterText.getText();
                 if (!text.equals("")) {
                     if(isClient){
-                        client.send(text);
+                        client.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
                         messageBox.append("Player 2: " + text + '\n');
                     } else {
-                        server.send(text);
+                        server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
                         messageBox.append("Player 1: " + text + '\n');
                     }
                     //messageBox.append(text + '\n');
