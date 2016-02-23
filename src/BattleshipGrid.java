@@ -8,72 +8,101 @@ import java.awt.event.MouseEvent;
 /**
  * Created by jskarda on 2/16/16.
  */
-public class BattleshipGrid extends JPanel {
-    public BattleshipGrid() {
-        setLayout(new GridBagLayout());
+public class BattleshipGrid extends JFrame {
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        for (int row = 0; row < 10; row++) {
-            for (int col = 0; col < 10; col++) {
-                gbc.gridx = col;
-                gbc.gridy = row;
 
-                CellPane cellPane = new CellPane();
-                Border border = null;
-                if (row < 9) {
-                    if (col < 9) {
-                        border = new MatteBorder(1, 1, 0, 0, Color.GRAY);
-                    } else {
-                        border = new MatteBorder(1, 1, 0, 1, Color.GRAY);
-                    }
-                } else {
-                    if (col < 9) {
-                        border = new MatteBorder(1, 1, 1, 0, Color.GRAY);
-                    } else {
-                        border = new MatteBorder(1, 1, 1, 1, Color.GRAY);
-                    }
-                }
-                cellPane.setBorder(border);
-                add(cellPane, gbc);
-            }
-        }
+    public static void main(String[] args) {
+        new BattleshipGrid();
     }
 
-    public class CellPane extends JPanel {
+    public BattleshipGrid() {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                }
+
+                JFrame frame = new JFrame("Testing");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setLayout(new BorderLayout());
+                frame.add(new TestPane());
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                frame.setSize(800,800);
+            }
+        });
+    }
+
+    public class TestPane extends JPanel {
+        private CellPane[][] gridSpaces;
+        public TestPane() {
+            setLayout(new GridBagLayout());
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            for (int row = 0; row < 10; row++) {
+                for (int col = 0; col < 10; col++) {
+                    gbc.gridx = col;
+                    gbc.gridy = row;
+
+                    CellPane cellPane = new CellPane();
+                    Border border = null;
+                    if (row < 9) {
+                        if (col < 9) {
+                            border = new MatteBorder(1, 1, 0, 0, Color.GRAY);
+                        } else {
+                            border = new MatteBorder(1, 1, 0, 1, Color.GRAY);
+                        }
+                    } else {
+                        if (col < 9) {
+                            border = new MatteBorder(1, 1, 1, 0, Color.GRAY);
+                        } else {
+                            border = new MatteBorder(1, 1, 1, 1, Color.GRAY);
+                        }
+                    }
+                    cellPane.setBorder(border);
+                    add(cellPane, gbc);
+                    gridSpaces[row][col] = cellPane;
+                }
+            }
+        }
+        @Override
+        public Dimension getPreferredSize(){
+            return new Dimension(500,500);
+        }
+    }
+    public class CellPane extends JLabel {
 
         private Color defaultBackground = Color.BLACK;
-        private boolean isClicked = false;
-
+        private boolean isClicked;
         public CellPane() {
-            setBackground(defaultBackground);
+            setOpaque(true);
+            setForeground(defaultBackground);
             addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    //defaultBackground = Color.BLACK;
-                    //setBackground(Color.WHITE);
-                }
 
                 @Override
-                public void mouseExited(MouseEvent e) {
-                    //setBackground(defaultBackground);
-                }
-
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if(isClicked){
-                        setBackground(defaultBackground);
-                    } else {
-                        setBackground(Color.WHITE);
-                    }
+                public void mouseClicked(MouseEvent e){
+                    setForeground(Color.BLUE);
+                    setBackground(Color.BLUE);
+                    repaint();
                 }
             });
         }
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(40, 40);
+            return new Dimension(50, 50);
+        }
+
+        public boolean getIsClicked(){
+            return isClicked;
         }
     }
+
+
+
 }
 
 
