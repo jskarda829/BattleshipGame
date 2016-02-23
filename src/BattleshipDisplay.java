@@ -1,6 +1,6 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
-import java.awt.Dimension;
 import javax.swing.JFrame;
 
 /**
@@ -8,12 +8,17 @@ import javax.swing.JFrame;
  */
 public class BattleshipDisplay extends JFrame {
 
+    public JButton sendButton;
+    public JTextField enterText;
+    public JTextArea messageBox;
     public JButton hostButton;
     public JButton clientButton;
     public JTextField IPAddress;
     boolean isClient;
     public Server server;
     public Client client;
+    private BattleshipGrid bfgTop;
+    private BattleshipGrid bfgBottom;
 
     public BattleshipDisplay() {
         initUI();
@@ -45,9 +50,14 @@ public class BattleshipDisplay extends JFrame {
             }
         });
 
+
         add(IPAddress);
         add(hostButton);
         add(clientButton);
+
+        bfgBottom = new BattleshipGrid();
+        bfgBottom.setVisible(true);
+        getContentPane().add(bfgBottom);
         setTitle("Battleship");
         setSize(800, 800);
         setMaximumSize(new Dimension(800, 800));
@@ -62,9 +72,15 @@ public class BattleshipDisplay extends JFrame {
         remove(clientButton);
 
         //Instantiate components
-        JButton sendButton = new JButton("Send");
-        JTextField enterText = new JTextField("Enter message");
-        JTextArea messageBox = new JTextArea();
+        bfgBottom = new BattleshipGrid();
+        bfgBottom.setLocation(225, 380);
+        System.out.println(bfgBottom.isVisible());
+        System.out.println(bfgBottom.isOpaque());
+        bfgTop = new BattleshipGrid();
+        bfgTop.setLocation(225, 15);
+        sendButton = new JButton("Send");
+        enterText = new JTextField("Enter message");
+        messageBox = new JTextArea();
         //Set behavior of the messagebox/scrollpane
         messageBox.setEditable(false);
         JScrollPane j = new JScrollPane(messageBox);
@@ -121,13 +137,15 @@ public class BattleshipDisplay extends JFrame {
                 }
             }
         });
+        add(bfgBottom);
+        add(bfgTop);
         add(sendButton);
         add(enterText);
         add(j);
         if(isClient){
             client = new Client(messageBox);
             try {
-                client.runClient("fakeIP");
+                client.runClient("fakeIP");//TODO set real ip from user
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -140,18 +158,19 @@ public class BattleshipDisplay extends JFrame {
             }
         }
         repaint();
+        pack();
     }
 
     public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
+//        SwingUtilities.invokeLater(new Runnable() {
+//
+//            @Override
+//            public void run() {
                 BattleshipDisplay ex = new BattleshipDisplay();
                 ex.setVisible(true);
-            }
-        });
+//            }
+//        });
     }
 
 

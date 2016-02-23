@@ -8,39 +8,51 @@ import java.awt.event.MouseEvent;
 /**
  * Created by jskarda on 2/16/16.
  */
-public class BattleshipGrid extends JFrame {
+public class BattleshipGrid extends JPanel {
 
 
-    public static void main(String[] args) {
-        new BattleshipGrid();
-    }
+    //public static void main(String[] args) {
+    //    new BattleshipGrid();
+    //}
 
     public BattleshipGrid() {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                }
+//        EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+//                }
+//
+//                setLayout(new BorderLayout());
+//                add(new TestPane());
+//                setVisible(true);
+//                JFrame frame = new JFrame("Testing");
+//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                frame.setLayout(new BorderLayout());
+//                frame.add(new TestPane());
+//                frame.pack();
+//                frame.setLocationRelativeTo(null);
+//                frame.setVisible(true);
+//                frame.setSize(800,800);
+                setLayout(new BorderLayout());
+                add(new TestPane());
+                setVisible(true);
+                setOpaque(true);
 
-                JFrame frame = new JFrame("Testing");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setLayout(new BorderLayout());
-                frame.add(new TestPane());
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                frame.setSize(800,800);
-            }
-        });
+//            }
+//        });
+        //add(new BattleshipGrid());
+        //setLayout(new BorderLayout());
+
     }
 
     public class TestPane extends JPanel {
         private CellPane[][] gridSpaces;
+
         public TestPane() {
             setLayout(new GridBagLayout());
-
+            gridSpaces = new CellPane[10][10];
             GridBagConstraints gbc = new GridBagConstraints();
             for (int row = 0; row < 10; row++) {
                 for (int col = 0; col < 10; col++) {
@@ -77,6 +89,7 @@ public class BattleshipGrid extends JFrame {
 
         private Color defaultBackground = Color.BLACK;
         private boolean isClicked;
+        private boolean isShipHere;
         public CellPane() {
             setOpaque(true);
             setForeground(defaultBackground);
@@ -84,6 +97,7 @@ public class BattleshipGrid extends JFrame {
 
                 @Override
                 public void mouseClicked(MouseEvent e){
+                    System.out.println("F");
                     setForeground(Color.BLUE);
                     setBackground(Color.BLUE);
                     repaint();
@@ -93,7 +107,7 @@ public class BattleshipGrid extends JFrame {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(50, 50);
+            return new Dimension(35, 35);
         }
 
         public boolean getIsClicked(){
