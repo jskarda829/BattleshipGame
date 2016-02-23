@@ -20,6 +20,7 @@ public class BattleshipDisplay extends JFrame {
     private BattleshipGrid bfgTop;
     private BattleshipGrid bfgBottom;
 
+
     public BattleshipDisplay() {
         initUI();
     }
@@ -51,13 +52,10 @@ public class BattleshipDisplay extends JFrame {
         });
 
 
+
         add(IPAddress);
         add(hostButton);
         add(clientButton);
-
-        bfgBottom = new BattleshipGrid();
-        bfgBottom.setVisible(true);
-        getContentPane().add(bfgBottom);
         setTitle("Battleship");
         setSize(800, 800);
         setMaximumSize(new Dimension(800, 800));
@@ -72,8 +70,11 @@ public class BattleshipDisplay extends JFrame {
         remove(clientButton);
 
         //Instantiate components
+       // bfgBottom = new BattleshipGrid();
+        //bfgBottom.setLocation(0, 0);
         bfgBottom = new BattleshipGrid();
-        bfgBottom.setLocation(225, 380);
+        bfgBottom.setBounds(400, 170, 350,350);
+        add(bfgBottom);
         System.out.println(bfgBottom.isVisible());
         System.out.println(bfgBottom.isOpaque());
         bfgTop = new BattleshipGrid();

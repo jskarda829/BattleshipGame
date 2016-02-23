@@ -15,7 +15,7 @@ public class BattleshipGrid extends JPanel {
     //    new BattleshipGrid();
     //}
 
-    public BattleshipGrid() {
+    public BattleshipGrid () {
 //        EventQueue.invokeLater(new Runnable() {
 //            @Override
 //            public void run() {
@@ -35,6 +35,9 @@ public class BattleshipGrid extends JPanel {
 //                frame.setLocationRelativeTo(null);
 //                frame.setVisible(true);
 //                frame.setSize(800,800);
+
+                //setPreferredSize(new Dimension(300, 300));
+
                 setLayout(new BorderLayout());
                 add(new TestPane());
                 setVisible(true);
