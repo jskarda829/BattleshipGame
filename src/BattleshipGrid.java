@@ -97,6 +97,7 @@ public class BattleshipGrid extends JPanel {
         private boolean isClicked = false;
         private boolean isShipHere;
         public CellPane() {
+
             setOpaque(true);
             setForeground(defaultBackground);
             addMouseListener(new MouseAdapter() {
@@ -109,6 +110,8 @@ public class BattleshipGrid extends JPanel {
                     repaint();
                 }
             });
+
+            isShipHere = false;
         }
 
         @Override
@@ -123,7 +126,18 @@ public class BattleshipGrid extends JPanel {
         public void setClicked(boolean trueFalse){
             isClicked = trueFalse;
         }
-    }
+
+        public boolean getIsShipHere(){
+            return isShipHere;
+        }
+
+        public void setIsShipHere(boolean b){
+            isShipHere = b;
+        }
+
+
+
+    }//close constructor CellPane()
 
     class DragMouseAdapter extends MouseAdapter {
         public void mousePressed(MouseEvent e) {

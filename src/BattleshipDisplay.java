@@ -8,12 +8,16 @@ import javax.swing.JFrame;
  */
 public class BattleshipDisplay extends JFrame {
 
+    //UI vars
     public JButton sendButton;
     public JTextField enterText;
     public JTextArea messageBox;
     public JButton hostButton;
     public JButton clientButton;
     public JTextField IPAddress;
+    public JButton assignRandomShipsButton;
+
+    //custom vars
     boolean isClient;
     public Server server;
     public Client client;
@@ -30,6 +34,7 @@ public class BattleshipDisplay extends JFrame {
         setLayout(null);
         IPAddress = new JTextField();
         IPAddress.setBounds(575, 100, 250, 50);
+
         hostButton = new JButton("Host Game");
         hostButton.setBounds(575, 170, 125, 50);
         hostButton.addActionListener(new ActionListener() {
@@ -39,6 +44,7 @@ public class BattleshipDisplay extends JFrame {
                 loadBoard();
             }
         });
+
         clientButton = new JButton("Join Game");
         clientButton.setBounds(700, 170, 125, 50);
         clientButton.addActionListener(new ActionListener() {
@@ -50,6 +56,8 @@ public class BattleshipDisplay extends JFrame {
                 }
             }
         });
+
+
 
 
 
@@ -117,6 +125,7 @@ public class BattleshipDisplay extends JFrame {
             public void keyReleased(KeyEvent e) {
             }
         });
+
         sendButton.setBounds(1080, 720, 80, 20);
         sendButton.addActionListener(new ActionListener() {
             @Override
@@ -135,11 +144,26 @@ public class BattleshipDisplay extends JFrame {
                 }
             }
         });
+
+        assignRandomShipsButton = new JButton("Random Ships");
+        assignRandomShipsButton.setBounds(880, 550, 160, 20);
+        assignRandomShipsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //assign random ships
+                setRandomShips();
+            }
+        });
+
+
+        //add stuff to board
         add(bfgBottom);
         add(bfgTop);
         add(sendButton);
         add(enterText);
         add(j);
+        add(assignRandomShipsButton);
+
         if(isClient){
             client = new Client(messageBox);
             try {
@@ -157,6 +181,14 @@ public class BattleshipDisplay extends JFrame {
         }
         repaint();
         pack();
+    }//close loadBoard()
+
+    private void setRandomShips(){
+        print("Assigning random ships");
+    }
+
+    private void print(String s){
+        System.out.println(s);
     }
 
     public static void main(String[] args) {
