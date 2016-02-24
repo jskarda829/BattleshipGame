@@ -185,6 +185,7 @@ public class BattleshipDisplay extends JFrame {
 
     private void setRandomShips(){
         print("Assigning random ships");
+        bfgBottom.assignRandomShips();
     }
 
     private void print(String s){

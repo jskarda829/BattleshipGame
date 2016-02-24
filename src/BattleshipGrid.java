@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 /**
  * Created by jskarda on 2/16/16.
@@ -15,6 +16,8 @@ public class BattleshipGrid extends JPanel {
 
 
     MouseListener listener;
+    private CellPane[][] gridSpaces;
+    public Color COLOR_CELL_HAS_SHIP = Color.magenta;
 
     public BattleshipGrid () {
 
@@ -30,7 +33,7 @@ public class BattleshipGrid extends JPanel {
     }
 
     public class TestPane extends JPanel {
-        private CellPane[][] gridSpaces;
+
 
         public TestPane()  {
             setLayout(new GridBagLayout());
@@ -90,7 +93,27 @@ public class BattleshipGrid extends JPanel {
         public Dimension getPreferredSize(){
             return new Dimension(500,600);
         }
+    }//close TestPane()
+
+    //BattleshipGrid helper functions
+
+    public void assignRandomShips(){
+        //generate 2 random numbers, row and col to set that cell as filled
+        Random random = new Random();
+        int row, col;
+        int max = 9, min = 0;
+        for(int i = 0; i < 10; i++){
+            row = (random.nextInt(max - min + 1) + min);
+            col = (random.nextInt(max - min + 1) + min);
+
+            gridSpaces[row][col].setIsShipHere(true);
+            gridSpaces[row][col].setBackground(COLOR_CELL_HAS_SHIP);
+
+            System.out.print("Row: " + row + " Col: " + col);
+        }
     }
+
+
     public class CellPane extends JLabel {
 
         private Color defaultBackground = Color.BLACK;
