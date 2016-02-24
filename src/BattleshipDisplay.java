@@ -152,6 +152,8 @@ public class BattleshipDisplay extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //assign random ships
                 setRandomShips();
+                assignRandomShipsButton.setVisible(false);
+                //remove(assignRandomShipsButton);
             }
         });
 
@@ -185,7 +187,20 @@ public class BattleshipDisplay extends JFrame {
 
     private void setRandomShips(){
         print("Assigning random ships");
-        bfgBottom.assignRandomShips();
+        boolean shipsAssigned = false;
+
+        shipsAssigned = bfgBottom.assignRandomShips();
+
+        messageBox.append("**_Your Ships are set_**\n");
+
+        if(shipsAssigned == true){
+            //send ships ready signal
+            if(isClient){
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
+            }else{
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
+            }
+        }
     }
 
     private void print(String s){

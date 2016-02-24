@@ -49,6 +49,11 @@ public class ServerReadRunnable implements Runnable {
                             e.printStackTrace();
                         }
 
+                    }else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET)) {
+
+                        System.out.println("Opponent ships are set");
+                        textBox.append("**_Opponent Ships are set_**\n");
+
                     }else{
 
                         System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage + " signal: " + SocketSignals.BATTLESHIP_SIGNAL_CHAT);

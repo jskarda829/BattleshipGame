@@ -72,11 +72,19 @@ public class Server {
     public void send(String signal, String message){
 
         if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_CHAT)){
+
             //send a chat message
             //send chat signal then chat message itself
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_CHAT);
             pwrite.flush();
             pwrite.println("Player 1: " + message);
+
+        } else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET)){
+
+            //client ships are set and ready to play
+            //write opponent ready to message box
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET);
+            pwrite.flush();
         }
 
         pwrite.flush();

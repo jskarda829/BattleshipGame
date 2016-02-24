@@ -97,20 +97,31 @@ public class BattleshipGrid extends JPanel {
 
     //BattleshipGrid helper functions
 
-    public void assignRandomShips(){
+    public boolean assignRandomShips(){
         //generate 2 random numbers, row and col to set that cell as filled
         Random random = new Random();
         int row, col;
         int max = 9, min = 0;
-        for(int i = 0; i < 10; i++){
+        int numShipsAssigned = 0;
+
+        while(numShipsAssigned < 10){
             row = (random.nextInt(max - min + 1) + min);
             col = (random.nextInt(max - min + 1) + min);
 
-            gridSpaces[row][col].setIsShipHere(true);
-            gridSpaces[row][col].setBackground(COLOR_CELL_HAS_SHIP);
+            if(gridSpaces[row][col].getIsShipHere() == false) {
+                gridSpaces[row][col].setIsShipHere(true);
+                gridSpaces[row][col].setBackground(COLOR_CELL_HAS_SHIP);
 
-            System.out.print("Row: " + row + " Col: " + col);
+                numShipsAssigned++;
+
+                System.out.print("Row: " + row + " Col: " + col);
+            }else{
+                //do nothing cuz theres already a ship there
+                System.out.print("Already ship there");
+            }
         }
+
+        return true;
     }
 
 
