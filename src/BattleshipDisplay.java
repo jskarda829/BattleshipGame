@@ -16,6 +16,7 @@ public class BattleshipDisplay extends JFrame {
     public JButton clientButton;
     public JTextField IPAddress;
     public JButton assignRandomShipsButton;
+    public JButton fireButton;
 
     //custom vars
     boolean isClient;
@@ -23,6 +24,7 @@ public class BattleshipDisplay extends JFrame {
     public Client client;
     private BattleshipGrid bfgTop;
     private BattleshipGrid bfgBottom;
+    private boolean canShoot = false;
 
 
     public BattleshipDisplay() {
@@ -153,9 +155,16 @@ public class BattleshipDisplay extends JFrame {
                 //assign random ships
                 setRandomShips();
                 assignRandomShipsButton.setVisible(false);
-                //remove(assignRandomShipsButton);
             }
         });
+
+        fireButton = new JButton();
+        ImageIcon i = new ImageIcon("src/nuke_fire_100x100.jpg");
+        fireButton.setIcon(i);
+        //fireButton.setText("Fire");
+        fireButton.setToolTipText("Fire!");
+        fireButton.setBounds(634, 500, 100, 100);
+        //fireButton.setVisible(false);
 
 
         //add stuff to board
@@ -165,6 +174,7 @@ public class BattleshipDisplay extends JFrame {
         add(enterText);
         add(j);
         add(assignRandomShipsButton);
+        add(fireButton);
 
         if(isClient){
             client = new Client(messageBox);
