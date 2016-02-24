@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 /**
  * Created by jskarda on 2/16/16.
@@ -15,6 +16,8 @@ public class BattleshipGrid extends JPanel {
 
 
     MouseListener listener;
+    private CellPane[][] gridSpaces;
+    public Color COLOR_CELL_HAS_SHIP = Color.magenta;
 
     public BattleshipGrid () {
 
@@ -30,7 +33,7 @@ public class BattleshipGrid extends JPanel {
     }
 
     public class TestPane extends JPanel {
-        private CellPane[][] gridSpaces;
+
 
         public TestPane()  {
             setLayout(new GridBagLayout());
@@ -90,13 +93,45 @@ public class BattleshipGrid extends JPanel {
         public Dimension getPreferredSize(){
             return new Dimension(500,600);
         }
+    }//close TestPane()
+
+    //BattleshipGrid helper functions
+
+    public boolean assignRandomShips(){
+        //generate 2 random numbers, row and col to set that cell as filled
+        Random random = new Random();
+        int row, col;
+        int max = 9, min = 0;
+        int numShipsAssigned = 0;
+
+        while(numShipsAssigned < 10){
+            row = (random.nextInt(max - min + 1) + min);
+            col = (random.nextInt(max - min + 1) + min);
+
+            if(gridSpaces[row][col].getIsShipHere() == false) {
+                gridSpaces[row][col].setIsShipHere(true);
+                gridSpaces[row][col].setBackground(COLOR_CELL_HAS_SHIP);
+
+                numShipsAssigned++;
+
+                System.out.print("Row: " + row + " Col: " + col);
+            }else{
+                //do nothing cuz theres already a ship there
+                System.out.print("Already ship there");
+            }
+        }
+
+        return true;
     }
+
+
     public class CellPane extends JLabel {
 
         private Color defaultBackground = Color.BLACK;
         private boolean isClicked = false;
         private boolean isShipHere;
         public CellPane() {
+
             setOpaque(true);
             setForeground(defaultBackground);
             addMouseListener(new MouseAdapter() {
@@ -109,6 +144,8 @@ public class BattleshipGrid extends JPanel {
                     repaint();
                 }
             });
+
+            isShipHere = false;
         }
 
         @Override
@@ -123,7 +160,18 @@ public class BattleshipGrid extends JPanel {
         public void setClicked(boolean trueFalse){
             isClicked = trueFalse;
         }
-    }
+
+        public boolean getIsShipHere(){
+            return isShipHere;
+        }
+
+        public void setIsShipHere(boolean b){
+            isShipHere = b;
+        }
+
+
+
+    }//close constructor CellPane()
 
     class DragMouseAdapter extends MouseAdapter {
         public void mousePressed(MouseEvent e) {
