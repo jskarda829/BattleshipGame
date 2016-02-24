@@ -73,9 +73,9 @@ public class BattleshipDisplay extends JFrame {
        // bfgBottom = new BattleshipGrid();
         //bfgBottom.setLocation(0, 0);
         bfgBottom = new BattleshipGrid();
-        bfgBottom.setBounds(700, 15, 500,500);
+        bfgBottom.setBounds(700, 15, 600,500);
         bfgTop = new BattleshipGrid();
-        bfgTop.setBounds(100, 15, 500, 500);
+        bfgTop.setBounds(100, 15, 600, 500);
         sendButton = new JButton("Send");
         enterText = new JTextField("Enter message");
         messageBox = new JTextArea();
@@ -170,6 +170,7 @@ public class BattleshipDisplay extends JFrame {
 //            }
 //        });
     }
+
 
 
 }
