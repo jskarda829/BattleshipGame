@@ -4,6 +4,9 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by jskarda on 2/16/16.
@@ -11,49 +14,25 @@ import java.awt.event.MouseEvent;
 public class BattleshipGrid extends JPanel {
 
 
-    //public static void main(String[] args) {
-    //    new BattleshipGrid();
-    //}
+    MouseListener listener;
 
     public BattleshipGrid () {
-//        EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-//                }
-//
-//                setLayout(new BorderLayout());
-//                add(new TestPane());
-//                setVisible(true);
-//                JFrame frame = new JFrame("Testing");
-//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                frame.setLayout(new BorderLayout());
-//                frame.add(new TestPane());
-//                frame.pack();
-//                frame.setLocationRelativeTo(null);
-//                frame.setVisible(true);
-//                frame.setSize(800,800);
 
-                //setPreferredSize(new Dimension(300, 300));
 
+        listener = new DragMouseAdapter();
                 setLayout(new BorderLayout());
                 add(new TestPane());
                 setVisible(true);
                 setOpaque(true);
 
-//            }
-//        });
-        //add(new BattleshipGrid());
-        //setLayout(new BorderLayout());
+
 
     }
 
     public class TestPane extends JPanel {
         private CellPane[][] gridSpaces;
 
-        public TestPane() {
+        public TestPane()  {
             setLayout(new GridBagLayout());
             gridSpaces = new CellPane[10][10];
             GridBagConstraints gbc = new GridBagConstraints();
@@ -82,10 +61,34 @@ public class BattleshipGrid extends JPanel {
                     gridSpaces[row][col] = cellPane;
                 }
             }
+
+            gbc.gridx = 10;
+            gbc.gridy = 0;
+
+            JLabel jl = null;
+            try {
+                jl = new JLabel(new ImageIcon(new URL("http://i.stack.imgur.com/8BGfi.png")));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            jl.addMouseListener(listener);
+            jl.setSize(50, 50);
+
+            jl.setTransferHandler(new TransferHandler("icon"));
+
+            for(int i = 0; i < 10; i++){
+                for(int j = 0; j < 10; j++){
+                    gridSpaces[i][j].setTransferHandler(new TransferHandler("icon"));
+                }
+            }
+
+
+            add(jl, gbc);
+
         }
         @Override
         public Dimension getPreferredSize(){
-            return new Dimension(500,500);
+            return new Dimension(500,600);
         }
     }
     public class CellPane extends JLabel {
@@ -119,6 +122,14 @@ public class BattleshipGrid extends JPanel {
 
         public void setClicked(boolean trueFalse){
             isClicked = trueFalse;
+        }
+    }
+
+    class DragMouseAdapter extends MouseAdapter {
+        public void mousePressed(MouseEvent e) {
+            JComponent c = (JComponent) e.getSource();
+            TransferHandler handler = c.getTransferHandler();
+            handler.exportAsDrag(c, e, TransferHandler.COPY);
         }
     }
 
