@@ -67,7 +67,7 @@ public class Client {
             //server ships are set and ready to play
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET);
             pwrite.flush();
-            
+
         }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING)){
 
             //get the row and col and send them over
@@ -86,6 +86,31 @@ public class Client {
             //send signal to client
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN);
             pwrite.flush();
+
+        }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT)){
+
+            int r = cellPane.getRow();
+            int c = cellPane.getColumn();
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT);
+            pwrite.flush();
+            pwrite.println(r);
+            pwrite.flush();
+            pwrite.println(c);
+
+        }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED)){
+
+            //send signal to client
+            int r = cellPane.getRow();
+            int c = cellPane.getColumn();
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED);
+            pwrite.flush();
+            pwrite.println(r);
+            pwrite.flush();
+            pwrite.println(c);
 
         }
 

@@ -114,6 +114,27 @@ public class Server {
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN);
             pwrite.flush();
 
+        }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT)){
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT);
+            pwrite.flush();
+            pwrite.println(cellPane.getRow());
+            pwrite.flush();
+            pwrite.println(cellPane.getColumn());
+            pwrite.flush();
+
+        }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED)){
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED);
+            pwrite.flush();
+            pwrite.println(cellPane.getRow());
+            pwrite.flush();
+            pwrite.println(cellPane.getColumn());
+            pwrite.flush();
+
+
         }
 
         pwrite.flush();

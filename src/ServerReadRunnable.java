@@ -73,7 +73,7 @@ public class ServerReadRunnable implements Runnable {
                         receiveMessage = bufferedReader.readLine();
                         colShotAt = Integer.parseInt(receiveMessage);
 
-                        battleshipDisplay.markOpponentShot(rowShotAt, colShotAt);
+                        battleshipDisplay.markOpponentsShot(rowShotAt, colShotAt);
 
 
                     }  else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN)) {
@@ -84,7 +84,35 @@ public class ServerReadRunnable implements Runnable {
                         battleshipDisplay.startTurn();
 
 
-                    } else{
+                    }  else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT)) {
+                        //read the row and col of where you shot and mark them
+
+                        int rowShotAt, colShotAt;
+
+                        receiveMessage = bufferedReader.readLine();
+                        rowShotAt = Integer.parseInt(receiveMessage);
+
+                        receiveMessage = bufferedReader.readLine();
+                        colShotAt = Integer.parseInt(receiveMessage);
+
+                        //you hit a ship
+                        battleshipDisplay.markYourShot(rowShotAt, colShotAt, true);
+
+                    }  else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED)) {
+                        //read the row and col of where you shot and mark them
+
+                        int rowShotAt, colShotAt;
+
+                        receiveMessage = bufferedReader.readLine();
+                        rowShotAt = Integer.parseInt(receiveMessage);
+
+                        receiveMessage = bufferedReader.readLine();
+                        colShotAt = Integer.parseInt(receiveMessage);
+
+                        //you hit a ship
+                        battleshipDisplay.markYourShot(rowShotAt, colShotAt, false);
+
+                    }  else{
 
                         System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);
                     }

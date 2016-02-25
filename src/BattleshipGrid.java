@@ -212,8 +212,30 @@ public class BattleshipGrid extends JPanel {
         return null;
     }
 
-    public void markShot(int row, int col){
-        gridSpaces[row][col].setBackground(Color.red);
+    public boolean markShot(int row, int col){
+
+        if(gridSpaces[row][col].getIsShipHere() == true){
+            System.out.print("Your ship has been hit!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
+            return true;
+        }else{
+            System.out.print("The enemy has missed!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+            return false;
+        }
+
+    }
+
+    public void markShot(int row, int col, boolean hit){
+
+        if(hit == true){
+            System.out.print("Your hit a ship!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
+        }else{
+            System.out.print("You missed!!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+        }
+
     }
 
 
