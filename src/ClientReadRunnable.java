@@ -10,11 +10,13 @@ public class ClientReadRunnable implements Runnable {
     //vars test
     BufferedReader bufferedReader;
     JTextArea textBox;
+    BattleshipDisplay battleshipDisplay;
 
-    public ClientReadRunnable (BufferedReader b, JTextArea messageField){
+    public ClientReadRunnable (BufferedReader b, JTextArea messageField, BattleshipDisplay bd){
 
         bufferedReader = b;
         textBox = messageField;
+        battleshipDisplay = bd;
     }
 
     @Override
@@ -48,14 +50,22 @@ public class ClientReadRunnable implements Runnable {
                             e.printStackTrace();
                         }
 
-                    }else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET)) {
+                    } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET)) {
 
                         System.out.println("Opponent ships are set");
                         textBox.append("**_Opponent Ships are set_**\n");
 
-                    }else{
+                    } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START)) {
 
-                            System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage + " signal: " + SocketSignals.BATTLESHIP_SIGNAL_CHAT);
+                        //print message to textbox then get vars ready for game
+
+                        textBox.append("**_Game is starting_**\n");
+                        battleshipDisplay.setGameReadyToStart(true);
+
+
+                    } else {
+
+                            System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);
 
                     }
 

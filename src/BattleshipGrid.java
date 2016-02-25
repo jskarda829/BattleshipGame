@@ -121,6 +121,8 @@ public class BattleshipGrid extends JPanel {
             }
         }
 
+        System.out.println();
+
         return true;
     }
 

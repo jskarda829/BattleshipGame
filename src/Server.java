@@ -29,9 +29,12 @@ public class Server {
     public InputStream istream;
     public BufferedReader receiveRead;
     JTextArea textBox;
+    BattleshipDisplay battleshipDisplay;
 
-    public Server(JTextArea j){
+
+    public Server(JTextArea j, BattleshipDisplay b){
         textBox = j;
+        battleshipDisplay = b;
     }
 
     public void runServer() throws Exception
@@ -59,7 +62,7 @@ public class Server {
 
 
 
-        Thread t2 = new Thread(new ServerReadRunnable(receiveRead, textBox));
+        Thread t2 = new Thread(new ServerReadRunnable(receiveRead, textBox, battleshipDisplay));
 
         t2.start();
 
@@ -84,6 +87,12 @@ public class Server {
             //client ships are set and ready to play
             //write opponent ready to message box
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET);
+            pwrite.flush();
+
+        } else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START)){
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START);
             pwrite.flush();
         }
 

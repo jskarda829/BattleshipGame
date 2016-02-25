@@ -16,6 +16,7 @@ public class BattleshipDisplay extends JFrame {
     public JButton clientButton;
     public JTextField IPAddress;
     public JButton assignRandomShipsButton;
+    public JButton fireButton;
 
     //custom vars
     boolean isClient;
@@ -23,6 +24,10 @@ public class BattleshipDisplay extends JFrame {
     public Client client;
     private BattleshipGrid bfgTop;
     private BattleshipGrid bfgBottom;
+    private boolean canShoot = false;
+    private boolean serverShips = false;
+    private boolean clientShips = false;
+    private boolean gameReadyToStart = false;
 
 
     public BattleshipDisplay() {
@@ -153,9 +158,16 @@ public class BattleshipDisplay extends JFrame {
                 //assign random ships
                 setRandomShips();
                 assignRandomShipsButton.setVisible(false);
-                //remove(assignRandomShipsButton);
             }
         });
+
+        fireButton = new JButton();
+        ImageIcon i = new ImageIcon("src/nuke_fire_100x100.jpg");
+        fireButton.setIcon(i);
+        //fireButton.setText("Fire");
+        fireButton.setToolTipText("Fire!");
+        fireButton.setBounds(634, 500, 100, 100);
+        //fireButton.setVisible(false);
 
 
         //add stuff to board
@@ -165,16 +177,17 @@ public class BattleshipDisplay extends JFrame {
         add(enterText);
         add(j);
         add(assignRandomShipsButton);
+        add(fireButton);
 
         if(isClient){
-            client = new Client(messageBox);
+            client = new Client(messageBox, this);
             try {
                 client.runClient("fakeIP");//TODO set real ip from user
             }catch(Exception e){
                 e.printStackTrace();
             }
         } else {
-            server = new Server(messageBox);
+            server = new Server(messageBox, this);
             try {
                 server.runServer();
             }catch(Exception e){
@@ -196,16 +209,75 @@ public class BattleshipDisplay extends JFrame {
         if(shipsAssigned == true){
             //send ships ready signal
             if(isClient){
+                print("setRandomShips() ships assigned is true, isClient is trur");
                 client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
-            }else{
+                clientShips = true;
+            } else {
+                print("setRandomShips() ships assigned is true, isClient is false");
+                serverShips = true;
                 server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
+                startGameIfReady();
             }
+        }
+    }
+
+
+
+
+
+    public void startGameIfReady(){
+
+        /*
+         *  Called when the server player set their ships and when the opponent sets their ships
+         *      it will check if both ships are set
+         *          if not, do nothing
+         *          if so, start the game
+         *              to start game:
+         *                  -pick who goes first, server can start for now..
+         *                  -send sstart signal to client
+         *                  -write to message box that game is ready to start
+         */
+
+        String TAG = "startGameIfReady()";
+        printInfo(TAG);
+
+        if((serverShips == true) && (clientShips == true)){
+            System.out.println("Ready to start game");
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START, null);
+            messageBox.append("**_Game Ready to Start_**\n");
+            gameReadyToStart = true;
+        }else {
+            System.out.println("Not Ready to start game");
+
+
         }
     }
 
     private void print(String s){
         System.out.println(s);
     }
+
+    public void printInfo(String TAG){
+        print(TAG);
+        print("isClient: " + isClient);
+        print("serverShips: " + serverShips);
+        print("clientShips: " + clientShips);
+    }
+
+    public void startTurn(){
+        /*
+         *  Set fire button visible
+         *  Listen for click on the opponent's grid
+         *  onclick for fire button, get the row and col of the clicked (targeted) cell
+         *  send that row and col to other player
+         */
+    }
+
+    public void endTurn(){
+
+    }
+
+
 
     public static void main(String[] args) {
 
@@ -217,6 +289,25 @@ public class BattleshipDisplay extends JFrame {
                 ex.setVisible(true);
 //            }
 //        });
+    }
+
+
+
+    //getters and setters
+    public boolean getClientShips(){
+        return clientShips;
+    }
+
+    public void setClientShips(boolean b){
+        clientShips = b;
+    }
+
+    public boolean getGameReadyToStart(){
+        return gameReadyToStart;
+    }
+
+    public void setGameReadyToStart(boolean b){
+        gameReadyToStart = b;
     }
 
 
