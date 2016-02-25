@@ -29,9 +29,12 @@ public class Server {
     public InputStream istream;
     public BufferedReader receiveRead;
     JTextArea textBox;
+    BattleshipDisplay battleshipDisplay;
 
-    public Server(JTextArea j){
+
+    public Server(JTextArea j, BattleshipDisplay b){
         textBox = j;
+        battleshipDisplay = b;
     }
 
     public void runServer() throws Exception
@@ -59,7 +62,7 @@ public class Server {
 
 
 
-        Thread t2 = new Thread(new ServerReadRunnable(receiveRead, textBox));
+        Thread t2 = new Thread(new ServerReadRunnable(receiveRead, textBox, battleshipDisplay));
 
         t2.start();
 

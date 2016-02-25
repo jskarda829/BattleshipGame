@@ -10,11 +10,13 @@ public class ServerReadRunnable implements Runnable {
     //vars
     BufferedReader bufferedReader;
     JTextArea textBox;
+    BattleshipDisplay battleshipDisplay;
 
-    public ServerReadRunnable (BufferedReader b, JTextArea j){
+    public ServerReadRunnable (BufferedReader b, JTextArea j, BattleshipDisplay bd){
 
         bufferedReader = b;
         textBox = j;
+        battleshipDisplay = bd;
 
     }
 
@@ -53,6 +55,8 @@ public class ServerReadRunnable implements Runnable {
 
                         System.out.println("Opponent ships are set");
                         textBox.append("**_Opponent Ships are set_**\n");
+                        battleshipDisplay.setOpponentShipsSet(true);
+                        battleshipDisplay.startGameIfReady();
 
                     }else{
 

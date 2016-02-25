@@ -25,6 +25,9 @@ public class BattleshipDisplay extends JFrame {
     private BattleshipGrid bfgTop;
     private BattleshipGrid bfgBottom;
     private boolean canShoot = false;
+    private boolean bothShipsSet = false;
+    private boolean yourShipsSet = false;
+    private boolean opponentShipsSet = false;
 
 
     public BattleshipDisplay() {
@@ -184,7 +187,7 @@ public class BattleshipDisplay extends JFrame {
                 e.printStackTrace();
             }
         } else {
-            server = new Server(messageBox);
+            server = new Server(messageBox, this);
             try {
                 server.runServer();
             }catch(Exception e){
@@ -203,13 +206,39 @@ public class BattleshipDisplay extends JFrame {
 
         messageBox.append("**_Your Ships are set_**\n");
 
+        yourShipsSet = true;
+
         if(shipsAssigned == true){
             //send ships ready signal
             if(isClient){
                 client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
-            }else{
+            }else {
                 server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
+                startGameIfReady();
             }
+        }
+    }
+
+    public boolean getOpponentShipsSet(){
+        return opponentShipsSet;
+    }
+
+    public void setOpponentShipsSet(boolean b){
+        opponentShipsSet = b;
+    }
+
+    public void startGameIfReady(){
+        /*
+         *  Called when the server player set their ships and when the opponent sets their ships
+         *      it will check if both ships are set
+         *          if not, do nothing
+         *          if so, start the game
+         */
+
+        if(yourShipsSet = true && opponentShipsSet == true){
+            System.out.println("Ready to start game");
+        }else {
+            System.out.println("Not Ready to start game");
         }
     }
 
