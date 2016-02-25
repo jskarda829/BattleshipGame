@@ -60,7 +60,31 @@ public class ServerReadRunnable implements Runnable {
                         battleshipDisplay.setClientShips(true);
                         battleshipDisplay.startGameIfReady();
 
-                    }else{
+                    } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING)) {
+
+                        //read 2 messages, row and col for a shot and then send those to the battseship display
+
+                        textBox.append("**_Enemy shot incoming_**\n");
+                        int rowShotAt, colShotAt;
+
+                        receiveMessage = bufferedReader.readLine();
+                        rowShotAt = Integer.parseInt(receiveMessage);
+
+                        receiveMessage = bufferedReader.readLine();
+                        colShotAt = Integer.parseInt(receiveMessage);
+
+                        battleshipDisplay.markOpponentShot(rowShotAt, colShotAt);
+
+
+                    }  else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN)) {
+
+                        //its now your turn, call startTurn()
+
+                        textBox.append("**_Your Turn_**\n");
+                        battleshipDisplay.startTurn();
+
+
+                    } else{
 
                         System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);
                     }

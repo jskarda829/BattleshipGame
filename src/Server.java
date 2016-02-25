@@ -72,7 +72,7 @@ public class Server {
 
     }//close main()
 
-    public void send(String signal, String message){
+    public void send(String signal, String message, BattleshipGrid.CellPane cellPane){
 
         if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_CHAT)){
 
@@ -94,6 +94,26 @@ public class Server {
             //send signal to client
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START);
             pwrite.flush();
+
+        }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING)){
+
+            //get the row and col and send them over
+            int r = cellPane.getRow();
+            int c = cellPane.getColumn();
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING);
+            pwrite.flush();
+            pwrite.println(r);
+            pwrite.flush();
+            pwrite.println(c);
+
+        }else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN)){
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN);
+            pwrite.flush();
+
         }
 
         pwrite.flush();
