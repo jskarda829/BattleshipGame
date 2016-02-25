@@ -60,6 +60,7 @@ public class ClientReadRunnable implements Runnable {
                         //print message to textbox then get vars ready for game
 
                         textBox.append("**_Game is starting_**\n");
+                        battleshipDisplay.setGameReadyToStart(true);
 
 
                     } else {

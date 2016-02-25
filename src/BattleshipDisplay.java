@@ -25,9 +25,9 @@ public class BattleshipDisplay extends JFrame {
     private BattleshipGrid bfgTop;
     private BattleshipGrid bfgBottom;
     private boolean canShoot = false;
-    private boolean bothShipsSet = false;
     private boolean serverShips = false;
     private boolean clientShips = false;
+    private boolean gameReadyToStart = false;
 
 
     public BattleshipDisplay() {
@@ -221,13 +221,9 @@ public class BattleshipDisplay extends JFrame {
         }
     }
 
-    public boolean getClientShips(){
-        return clientShips;
-    }
 
-    public void setClientShips(boolean b){
-        clientShips = b;
-    }
+
+
 
     public void startGameIfReady(){
 
@@ -249,7 +245,7 @@ public class BattleshipDisplay extends JFrame {
             System.out.println("Ready to start game");
             server.send(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START, null);
             messageBox.append("**_Game Ready to Start_**\n");
-
+            gameReadyToStart = true;
         }else {
             System.out.println("Not Ready to start game");
 
@@ -268,6 +264,21 @@ public class BattleshipDisplay extends JFrame {
         print("clientShips: " + clientShips);
     }
 
+    public void startTurn(){
+        /*
+         *  Set fire button visible
+         *  Listen for click on the opponent's grid
+         *  onclick for fire button, get the row and col of the clicked (targeted) cell
+         *  send that row and col to other player
+         */
+    }
+
+    public void endTurn(){
+
+    }
+
+
+
     public static void main(String[] args) {
 
 //        SwingUtilities.invokeLater(new Runnable() {
@@ -278,6 +289,25 @@ public class BattleshipDisplay extends JFrame {
                 ex.setVisible(true);
 //            }
 //        });
+    }
+
+
+
+    //getters and setters
+    public boolean getClientShips(){
+        return clientShips;
+    }
+
+    public void setClientShips(boolean b){
+        clientShips = b;
+    }
+
+    public boolean getGameReadyToStart(){
+        return gameReadyToStart;
+    }
+
+    public void setGameReadyToStart(boolean b){
+        gameReadyToStart = b;
     }
 
 
