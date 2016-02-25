@@ -7,6 +7,7 @@ public class SocketSignals {
 
     public static final String BATTLESHIP_SIGNAL_CHAT = "SIG-10000";
     public static final String BATTLESHIP_SIGNAL_SHIPS_ARE_SET = "SIG-10001";
+    public static final String BATTLESHIP_SIGNAL_READY_TO_START = "SIG-10002";
 
 
 }

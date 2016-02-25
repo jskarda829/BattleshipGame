@@ -26,8 +26,8 @@ public class BattleshipDisplay extends JFrame {
     private BattleshipGrid bfgBottom;
     private boolean canShoot = false;
     private boolean bothShipsSet = false;
-    private boolean yourShipsSet = false;
-    private boolean opponentShipsSet = false;
+    private boolean serverShips = false;
+    private boolean clientShips = false;
 
 
     public BattleshipDisplay() {
@@ -180,7 +180,7 @@ public class BattleshipDisplay extends JFrame {
         add(fireButton);
 
         if(isClient){
-            client = new Client(messageBox);
+            client = new Client(messageBox, this);
             try {
                 client.runClient("fakeIP");//TODO set real ip from user
             }catch(Exception e){
@@ -206,44 +206,66 @@ public class BattleshipDisplay extends JFrame {
 
         messageBox.append("**_Your Ships are set_**\n");
 
-        yourShipsSet = true;
-
         if(shipsAssigned == true){
             //send ships ready signal
             if(isClient){
+                print("setRandomShips() ships assigned is true, isClient is trur");
                 client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
-            }else {
+                clientShips = true;
+            } else {
+                print("setRandomShips() ships assigned is true, isClient is false");
+                serverShips = true;
                 server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
                 startGameIfReady();
             }
         }
     }
 
-    public boolean getOpponentShipsSet(){
-        return opponentShipsSet;
+    public boolean getClientShips(){
+        return clientShips;
     }
 
-    public void setOpponentShipsSet(boolean b){
-        opponentShipsSet = b;
+    public void setClientShips(boolean b){
+        clientShips = b;
     }
 
     public void startGameIfReady(){
+
         /*
          *  Called when the server player set their ships and when the opponent sets their ships
          *      it will check if both ships are set
          *          if not, do nothing
          *          if so, start the game
+         *              to start game:
+         *                  -pick who goes first, server can start for now..
+         *                  -send sstart signal to client
+         *                  -write to message box that game is ready to start
          */
 
-        if(yourShipsSet = true && opponentShipsSet == true){
+        String TAG = "startGameIfReady()";
+        printInfo(TAG);
+
+        if((serverShips == true) && (clientShips == true)){
             System.out.println("Ready to start game");
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START, null);
+            messageBox.append("**_Game Ready to Start_**\n");
+
         }else {
             System.out.println("Not Ready to start game");
+
+
         }
     }
 
     private void print(String s){
         System.out.println(s);
+    }
+
+    public void printInfo(String TAG){
+        print(TAG);
+        print("isClient: " + isClient);
+        print("serverShips: " + serverShips);
+        print("clientShips: " + clientShips);
     }
 
     public static void main(String[] args) {

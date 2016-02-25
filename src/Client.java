@@ -17,11 +17,13 @@ public class Client {
     InputStream istream;
     BufferedReader receiveRead;
     JTextArea textBox;
+    BattleshipDisplay battleshipDisplay;
 
 
 
-    public Client(JTextArea j){
+    public Client(JTextArea j, BattleshipDisplay b){
         textBox = j;
+        battleshipDisplay = b;
     }
 
 
@@ -42,7 +44,7 @@ public class Client {
 
         //socket Threads
 
-        Thread t2 = new Thread(new ClientReadRunnable(receiveRead, textBox));
+        Thread t2 = new Thread(new ClientReadRunnable(receiveRead, textBox, battleshipDisplay));
 
         t2.start();
 

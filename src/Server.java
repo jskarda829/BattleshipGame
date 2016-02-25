@@ -88,6 +88,12 @@ public class Server {
             //write opponent ready to message box
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET);
             pwrite.flush();
+
+        } else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START)){
+
+            //send signal to client
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START);
+            pwrite.flush();
         }
 
         pwrite.flush();
