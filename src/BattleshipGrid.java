@@ -39,7 +39,7 @@ public class BattleshipGrid extends JPanel {
                     gbc.gridx = col;
                     gbc.gridy = row;
 
-                    CellPane cellPane = new CellPane();
+                    CellPane cellPane = new CellPane(row, col);
                     Border border;
                     if (row < 9) {
                         if (col < 9) {
@@ -154,12 +154,18 @@ public class BattleshipGrid extends JPanel {
 
         private Color defaultBackground = Color.BLACK;
         private boolean isClicked = false;
+        private boolean isDone = false;
         private boolean isShipHere;
-        public CellPane() {
+        private int row;
+        private int column;
+
+        public CellPane(int r, int c) {
 
             setOpaque(true);
             setForeground(defaultBackground);
             isShipHere = false;
+            row = r;
+            column = c;
         }
 
         @Override
@@ -183,9 +189,15 @@ public class BattleshipGrid extends JPanel {
             isShipHere = b;
         }
 
+        public int getRow(){return row;}
 
+        public int getColumn(){return column;}
 
-    }//close constructor CellPane()
+        public boolean getIsDone(){  return isDone; }
+
+        public void setIsDone(boolean b){isDone = b;}
+
+    }//close CellPane class
 
     class DragMouseAdapter extends MouseAdapter {
         public void mousePressed(MouseEvent e) {
@@ -193,6 +205,48 @@ public class BattleshipGrid extends JPanel {
             TransferHandler handler = c.getTransferHandler();
             handler.exportAsDrag(c, e, TransferHandler.COPY);
         }
+    }
+
+    public CellPane getTargetedCell(){
+        //cycle through the grid cells to find the one clicked
+        //mark the targeted cell as done
+
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if((gridSpaces[i][j].getIsClicked() == true) && (gridSpaces[i][j].getIsDone() == false)){
+                    gridSpaces[i][j].setIsDone(true);
+                    return gridSpaces[i][j];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public boolean markShot(int row, int col){
+
+        if(gridSpaces[row][col].getIsShipHere() == true){
+            System.out.print("Your ship has been hit!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
+            return true;
+        }else{
+            System.out.print("The enemy has missed!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+            return false;
+        }
+
+    }
+
+    public void markShot(int row, int col, boolean hit){
+
+        if(hit == true){
+            System.out.print("Your hit a ship!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
+        }else{
+            System.out.print("You missed!!");
+            gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+        }
+
     }
 
 
