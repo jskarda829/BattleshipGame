@@ -22,8 +22,8 @@ public class BattleshipDisplay extends JFrame {
     boolean isClient;
     public Server server;
     public Client client;
-    private BattleshipGrid bfgTop;
-    private BattleshipGrid bfgBottom;
+    private BattleshipGrid bfgTop;  //left side (opponent)
+    private BattleshipGrid bfgBottom;   //right side (yours)
     private boolean canShoot = false;
     private boolean serverShips = false;
     private boolean clientShips = false;
@@ -114,10 +114,10 @@ public class BattleshipDisplay extends JFrame {
                     String text = enterText.getText();
                     if (!text.equals("")) {
                         if (isClient) {
-                            client.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
+                            client.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text, null);
                             messageBox.append("Player 2: " + text + '\n');
                         } else {
-                            server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
+                            server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text, null);
                             messageBox.append("Player 1: " + text + '\n');
                         }
                         //messageBox.append(text + '\n');
@@ -138,10 +138,10 @@ public class BattleshipDisplay extends JFrame {
                 String text = enterText.getText();
                 if (!text.equals("")) {
                     if (isClient) {
-                        client.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
+                        client.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text, null);
                         messageBox.append("Player 2: " + text + '\n');
                     } else {
-                        server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text);
+                        server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text, null);
                         messageBox.append("Player 1: " + text + '\n');
                     }
                     //messageBox.append(text + '\n');
@@ -164,8 +164,34 @@ public class BattleshipDisplay extends JFrame {
         fireButton = new JButton();
         ImageIcon i = new ImageIcon("src/nuke_fire_100x100.jpg");
         fireButton.setIcon(i);
-        //fireButton.setText("Fire");
         fireButton.setToolTipText("Fire!");
+        fireButton.setVisible(false);
+        fireButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Taking a shot!");
+                //get the row and col of the clicked targeted cell to send to other player
+                BattleshipGrid.CellPane temp = null;
+
+                temp = bfgTop.getTargetedCell();
+
+                if(temp != null){
+                    //send the targeted coordinates
+
+                    if(isClient){
+                        client.send(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING, null, temp);
+                    }else{
+                        server.send(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING, null, temp);
+                    }
+
+
+
+                }else{
+                    System.out.println("Temp is null");
+                }
+
+            }
+        });
         fireButton.setBounds(634, 500, 100, 100);
         //fireButton.setVisible(false);
 
@@ -210,12 +236,12 @@ public class BattleshipDisplay extends JFrame {
             //send ships ready signal
             if(isClient){
                 print("setRandomShips() ships assigned is true, isClient is trur");
-                client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
                 clientShips = true;
             } else {
                 print("setRandomShips() ships assigned is true, isClient is false");
                 serverShips = true;
-                server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null);
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
                 startGameIfReady();
             }
         }
@@ -243,9 +269,10 @@ public class BattleshipDisplay extends JFrame {
 
         if((serverShips == true) && (clientShips == true)){
             System.out.println("Ready to start game");
-            server.send(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START, null);
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START, null, null);
             messageBox.append("**_Game Ready to Start_**\n");
             gameReadyToStart = true;
+            startTurn();
         }else {
             System.out.println("Not Ready to start game");
 
@@ -271,10 +298,56 @@ public class BattleshipDisplay extends JFrame {
          *  onclick for fire button, get the row and col of the clicked (targeted) cell
          *  send that row and col to other player
          */
+
+        fireButton.setVisible(true);
+
     }
 
     public void endTurn(){
+        //set the fire button as invisible
+        //send the end of turn signal
+        fireButton.setVisible(false);
 
+        if(isClient){
+            client.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+        } else {
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+        }
+
+    }
+
+    public void markOpponentsShot(int row, int col){
+        boolean hit;
+
+        hit = bfgBottom.markShot(row, col);
+        BattleshipGrid.CellPane t = new BattleshipGrid().new CellPane(row, col);
+
+        if(hit == true){
+            //a ship was hit so send the hit signal
+            if(isClient){
+                //send miss signal and row and col of the miss
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT, null,  new BattleshipGrid().new CellPane(row, col));
+            }else{
+                //send miss signal and row and col of the miss
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT, null,  new BattleshipGrid().new CellPane(row, col));
+            }
+
+        }else{
+            //send the miss signal
+            if(isClient){
+                //send miss signal and row and col of the miss
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED, null,  new BattleshipGrid().new CellPane(row, col));
+            }else{
+                //send miss signal and row and col of the miss
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED, null,  new BattleshipGrid().new CellPane(row, col));
+            }
+        }
+    }
+
+    public void markYourShot(int row, int col, boolean hit){
+        bfgTop.markShot(row, col, hit);
+
+        endTurn();
     }
 
 
