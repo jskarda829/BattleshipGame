@@ -20,16 +20,11 @@ public class BattleshipGrid extends JPanel {
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
 
     public BattleshipGrid () {
-
-
         listener = new DragMouseAdapter();
-                setLayout(new BorderLayout());
-                add(new TestPane());
-                setVisible(true);
-                setOpaque(true);
-
-
-
+        setLayout(new BorderLayout());
+        add(new TestPane());
+        setVisible(true);
+        setOpaque(true);
     }
 
     public class TestPane extends JPanel {
@@ -39,14 +34,13 @@ public class BattleshipGrid extends JPanel {
             setLayout(new GridBagLayout());
             gridSpaces = new CellPane[10][10];
             GridBagConstraints gbc = new GridBagConstraints();
-            //gbc.insets = new Insets(0,0,0,0);
             for (int row = 0; row < 10; row++) {
                 for (int col = 0; col < 10; col++) {
                     gbc.gridx = col;
                     gbc.gridy = row;
 
                     CellPane cellPane = new CellPane();
-                    Border border = null;
+                    Border border;
                     if (row < 9) {
                         if (col < 9) {
                             border = new MatteBorder(1, 1, 0, 0, Color.GRAY);
@@ -165,17 +159,6 @@ public class BattleshipGrid extends JPanel {
 
             setOpaque(true);
             setForeground(defaultBackground);
-//            addMouseListener(new MouseAdapter() {
-//
-//                @Override
-//                public void mouseClicked(MouseEvent e){
-//                    System.out.println("F");
-//                    setForeground(Color.BLUE);
-//                    setBackground(Color.BLUE);
-//                    repaint();
-//                }
-//            });
-
             isShipHere = false;
         }
 
