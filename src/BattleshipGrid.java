@@ -20,16 +20,11 @@ public class BattleshipGrid extends JPanel {
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
 
     public BattleshipGrid () {
-
-
         listener = new DragMouseAdapter();
-                setLayout(new BorderLayout());
-                add(new TestPane());
-                setVisible(true);
-                setOpaque(true);
-
-
-
+        setLayout(new BorderLayout());
+        add(new TestPane());
+        setVisible(true);
+        setOpaque(true);
     }
 
     public class TestPane extends JPanel {
@@ -45,7 +40,7 @@ public class BattleshipGrid extends JPanel {
                     gbc.gridy = row;
 
                     CellPane cellPane = new CellPane(row, col);
-                    Border border = null;
+                    Border border;
                     if (row < 9) {
                         if (col < 9) {
                             border = new MatteBorder(1, 1, 0, 0, Color.GRAY);
@@ -60,6 +55,7 @@ public class BattleshipGrid extends JPanel {
                         }
                     }
                     cellPane.setBorder(border);
+                    cellPane.setBackground(Color.BLACK);
                     add(cellPane, gbc);
                     gridSpaces[row][col] = cellPane;
                 }
@@ -67,7 +63,6 @@ public class BattleshipGrid extends JPanel {
 
             gbc.gridx = 10;
             gbc.gridy = 0;
-
             JLabel jl = null;
             try {
                 jl = new JLabel(new ImageIcon(new URL("http://i.stack.imgur.com/8BGfi.png")));
@@ -75,7 +70,8 @@ public class BattleshipGrid extends JPanel {
                 e.printStackTrace();
             }
             jl.addMouseListener(listener);
-            jl.setSize(50, 50);
+            jl.setSize(100, 500);
+
 
             jl.setTransferHandler(new TransferHandler("icon"));
 
@@ -87,11 +83,38 @@ public class BattleshipGrid extends JPanel {
 
 
             add(jl, gbc);
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    for(int i = 0; i < 10; i++){
+                        for(int j = 0; j < 10; j++){
+                            if(gridSpaces[i][j].getIsClicked()){
+                                gridSpaces[i][j].setBackground(Color.BLACK);
+                                gridSpaces[i][j].setClicked(false);
+                                System.out.println(gridSpaces[i][j].getX() + " " + gridSpaces[i][j].getY());
+                            }
+                        }
+                    }
+                    if(e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+                        for(int i = 0; i < 10; i++){
+                            for(int j = 0; j < 10; j++){
+                                if(e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50){
+                                    if(e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50){
+                                        gridSpaces[i][j].setBackground(Color.BLUE);
+                                        gridSpaces[i][j].setClicked(true);
+                                    }
+                                }
+                            }
+                        }
+                        repaint();
+                    }
+                }
+            });
 
         }
         @Override
         public Dimension getPreferredSize(){
-            return new Dimension(500,600);
+            return new Dimension(600,500);
         }
     }//close TestPane()
 
@@ -140,18 +163,6 @@ public class BattleshipGrid extends JPanel {
 
             setOpaque(true);
             setForeground(defaultBackground);
-            addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseClicked(MouseEvent e){
-                    System.out.println("F");
-                    setForeground(Color.BLUE);
-                    setBackground(Color.BLUE);
-                    setClicked(true);
-                    repaint();
-                }
-            });
-
             isShipHere = false;
             row = r;
             column = c;
