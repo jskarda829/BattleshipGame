@@ -169,6 +169,12 @@ public class BattleshipDisplay extends JFrame {
         fireButton.setBounds(634, 500, 100, 100);
         //fireButton.setVisible(false);
 
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Overall point = " + e.getPoint());
+            }
+        });
 
         //add stuff to board
         add(bfgBottom);
