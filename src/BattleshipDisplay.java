@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.Socket;
 import javax.swing.JFrame;
 
 /**
@@ -28,6 +29,7 @@ public class BattleshipDisplay extends JFrame {
     private boolean serverShips = false;
     private boolean clientShips = false;
     private boolean gameReadyToStart = false;
+    private boolean isGameOver = false;
 
 
     public BattleshipDisplay() {
@@ -195,13 +197,6 @@ public class BattleshipDisplay extends JFrame {
         fireButton.setBounds(634, 500, 100, 100);
         //fireButton.setVisible(false);
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Overall point = " + e.getPoint());
-            }
-        });
-
         //add stuff to board
         add(bfgBottom);
         add(bfgTop);
@@ -314,10 +309,37 @@ public class BattleshipDisplay extends JFrame {
         //send the end of turn signal
         fireButton.setVisible(false);
 
+
         if(isClient){
-            client.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+            client.send(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS, null, null);
+            print("sending check ships signal");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(isGameOver){
+                print("Game over signal being sent");
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
+            } else {
+                print("your turn signal being sent");
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+            }
         } else {
-            server.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS, null, null);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(isGameOver){
+                print("Game over signal being sent");
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
+            } else {
+                print("your turn signal being sent");
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+            }
+
         }
 
     }
@@ -332,20 +354,20 @@ public class BattleshipDisplay extends JFrame {
             //a ship was hit so send the hit signal
             if(isClient){
                 //send miss signal and row and col of the miss
-                client.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT, null,  new BattleshipGrid().new CellPane(row, col));
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT, null,  t);
             }else{
                 //send miss signal and row and col of the miss
-                server.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT, null,  new BattleshipGrid().new CellPane(row, col));
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_HIT, null,  t);
             }
 
         }else{
             //send the miss signal
             if(isClient){
                 //send miss signal and row and col of the miss
-                client.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED, null,  new BattleshipGrid().new CellPane(row, col));
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED, null, t);
             }else{
                 //send miss signal and row and col of the miss
-                server.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED, null,  new BattleshipGrid().new CellPane(row, col));
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_TARGET_MISSED, null,  t);
             }
         }
     }
@@ -389,6 +411,24 @@ public class BattleshipDisplay extends JFrame {
         gameReadyToStart = b;
     }
 
+    public void setBoardAfterGameOver(){
+        messageBox.append("GAME OVER NIGRO");
+    }
 
+    public void setGameOver(boolean b){
+        messageBox.append("SETTING GAME OVER" + '\n');
+        isGameOver = b;
+    }
+
+    public boolean checkGameOver(){
+        messageBox.append("CHECKING GAME OVER" + '\n');
+        boolean b = bfgBottom.isGameOver();
+        if(b){
+            setBoardAfterGameOver();
+        } else {
+            return b;
+        }
+        return b;
+    }
 
 }

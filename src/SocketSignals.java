@@ -14,6 +14,8 @@ public class SocketSignals {
     public static final String BATTLESHIP_SIGNAL_YOUR_TURN= "SIG-10004";
     public static final String BATTLESHIP_SIGNAL_TARGET_HIT= "SIG-10005";
     public static final String BATTLESHIP_SIGNAL_TARGET_MISSED= "SIG-10006";
+    public static final String BATTLESHIP_SIGNAL_CHECK_SHIPS = "SIG-10007";
+    public static final String BATTLESHIP_SIGNAL_GAME_OVER = "SIG-10008";
 
     public static final Color BATTLESHIP_COLOR_SHIP_HIT = Color.red;
     public static final Color BATTLESHIP_COLOR_SHIP_MISS = Color.gray;
