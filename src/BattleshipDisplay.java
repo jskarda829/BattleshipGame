@@ -300,7 +300,24 @@ public class BattleshipDisplay extends JFrame {
          *  send that row and col to other player
          */
 
-        fireButton.setVisible(true);
+        isGameOver = bfgBottom.isGameOver();
+
+        if(isGameOver){
+            //you lost, opponent won
+
+            if(isClient){
+                client.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
+            }else{
+                server.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
+            }
+
+            youLost();
+
+        }else{
+            fireButton.setVisible(true);
+        }
+
+
 
     }
 
@@ -309,7 +326,14 @@ public class BattleshipDisplay extends JFrame {
         //send the end of turn signal
         fireButton.setVisible(false);
 
+        if(isClient){
+            client.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+        }else{
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
+        }
 
+
+    /*
         if(isClient){
             client.send(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS, null, null);
             print("sending check ships signal");
@@ -341,6 +365,8 @@ public class BattleshipDisplay extends JFrame {
             }
 
         }
+
+     */
 
     }
 
@@ -429,6 +455,14 @@ public class BattleshipDisplay extends JFrame {
             return b;
         }
         return b;
+    }
+
+    public void youWon(){
+        messageBox.append("GAME OVER, YOU WIN" + '\n');
+    }
+
+    public void youLost(){
+        messageBox.append("GAME OVER, YOU LOST" + '\n');
     }
 
 }

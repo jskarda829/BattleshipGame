@@ -120,8 +120,14 @@ public class ClientReadRunnable implements Runnable {
                             battleshipDisplay.client.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
                         }
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER)){
+                        //the opponent lost so you won
+
+                        battleshipDisplay.youWon();
+
+                        /*
                         System.out.println("set board after being called client");
                         battleshipDisplay.setBoardAfterGameOver();
+                        */
                     } else {
 
                             System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);
