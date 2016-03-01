@@ -135,6 +135,12 @@ public class Server {
             pwrite.flush();
 
 
+        } else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER)){
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER);
+            pwrite.flush();
+        } else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS)) {
+            pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS);
+            pwrite.flush();
         }
 
         pwrite.flush();

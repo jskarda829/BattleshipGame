@@ -113,7 +113,16 @@ public class ClientReadRunnable implements Runnable {
                         //you hit a ship
                         battleshipDisplay.markYourShot(rowShotAt, colShotAt, false);
 
-                    }   else {
+                    }   else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS)){
+                        if(battleshipDisplay.checkGameOver()){
+                            System.out.println("Game over being set client in runnable");
+                            battleshipDisplay.setGameOver(true);
+                            battleshipDisplay.client.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
+                        }
+                    } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER)){
+                        System.out.println("set board after being called client");
+                        battleshipDisplay.setBoardAfterGameOver();
+                    } else {
 
                             System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);
 

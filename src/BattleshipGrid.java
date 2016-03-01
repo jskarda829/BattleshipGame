@@ -84,14 +84,16 @@ public class BattleshipGrid extends JPanel {
 
             add(jl, gbc);
             addMouseListener(new MouseAdapter() {
-                @Override
+
                 public void mouseClicked(MouseEvent e) {
                     for(int i = 0; i < 10; i++){
                         for(int j = 0; j < 10; j++){
                             if(gridSpaces[i][j].getIsClicked()){
-                                gridSpaces[i][j].setBackground(Color.BLACK);
-                                gridSpaces[i][j].setClicked(false);
-                                System.out.println(gridSpaces[i][j].getX() + " " + gridSpaces[i][j].getY());
+                                if(!gridSpaces[i][j].isDone) {
+                                    gridSpaces[i][j].setBackground(Color.BLACK);
+                                    gridSpaces[i][j].setClicked(false);
+                                    System.out.println(gridSpaces[i][j].getX() + " " + gridSpaces[i][j].getY());
+                                }
                             }
                         }
                     }
@@ -100,14 +102,28 @@ public class BattleshipGrid extends JPanel {
                             for(int j = 0; j < 10; j++){
                                 if(e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50){
                                     if(e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50){
-                                        gridSpaces[i][j].setBackground(Color.BLUE);
-                                        gridSpaces[i][j].setClicked(true);
+                                        if(!gridSpaces[i][j].isDone) {
+                                            gridSpaces[i][j].setBackground(Color.BLUE);
+                                            gridSpaces[i][j].setClicked(true);
+                                        }
                                     }
                                 }
                             }
                         }
                         repaint();
                     }
+                }
+
+                public void mouseEntered(MouseEvent e){
+                    if(e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+                        setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+                    } else {
+                        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+                }
+
+                public void mouseExited(MouseEvent e){
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
 
@@ -127,7 +143,7 @@ public class BattleshipGrid extends JPanel {
         int max = 9, min = 0;
         int numShipsAssigned = 0;
 
-        while(numShipsAssigned < 10){
+        while(numShipsAssigned < 2){
             row = (random.nextInt(max - min + 1) + min);
             col = (random.nextInt(max - min + 1) + min);
 
@@ -155,7 +171,7 @@ public class BattleshipGrid extends JPanel {
         private Color defaultBackground = Color.BLACK;
         private boolean isClicked = false;
         private boolean isDone = false;
-        private boolean isShipHere;
+        private boolean isShipHere = false;
         private int row;
         private int column;
 
@@ -228,28 +244,43 @@ public class BattleshipGrid extends JPanel {
         if(gridSpaces[row][col].getIsShipHere() == true){
             System.out.print("Your ship has been hit!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
+            gridSpaces[row][col].setIsDone(true);
             return true;
         }else{
             System.out.print("The enemy has missed!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+            gridSpaces[row][col].setIsDone(true);
             return false;
         }
+
 
     }
 
     public void markShot(int row, int col, boolean hit){
 
         if(hit == true){
-            System.out.print("Your hit a ship!");
+            System.out.print("You hit a ship!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
         }else{
             System.out.print("You missed!!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
         }
+        gridSpaces[row][col].setIsDone(true);
 
     }
 
-
+    public boolean isGameOver(){
+        System.out.println("checking is game over inside of grid");
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(gridSpaces[i][j].isShipHere && !gridSpaces[i][j].isDone){
+                    return false;
+                }
+            }
+        }
+        System.out.println("Game is over");
+        return true;
+    }
 
 }
 
