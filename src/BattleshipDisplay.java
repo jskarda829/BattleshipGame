@@ -9,6 +9,13 @@ import javax.swing.JFrame;
  */
 public class BattleshipDisplay extends JFrame {
 
+    /*
+
+        For drag and drop:
+            could use mouse listener to determine which ship is clicked and then determine which cells ship can or can not be dropped on
+            could use onMouseClick and onMouseUnClick events
+     */
+
     //UI vars
     public JButton sendButton;
     public JTextField enterText;
