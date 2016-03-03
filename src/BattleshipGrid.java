@@ -63,46 +63,38 @@ public class BattleshipGrid extends JPanel {
 
             gbc.gridx = 10;
             gbc.gridy = 0;
-            JLabel jl = null;
-            try {
-                jl = new JLabel(new ImageIcon(new URL("http://i.stack.imgur.com/8BGfi.png")));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            jl.addMouseListener(listener);
-            jl.setSize(100, 500);
-
-
-            jl.setTransferHandler(new TransferHandler("icon"));
+            gbc.gridheight = 5;
+            Carrier c = new Carrier();
+            c.addMouseListener(listener);
+            c.setTransferHandler(new TransferHandler("icon"));
 
             for(int i = 0; i < 10; i++){
                 for(int j = 0; j < 10; j++){
                     gridSpaces[i][j].setTransferHandler(new TransferHandler("icon"));
                 }
             }
+            add(c, gbc);
 
-
-            add(jl, gbc);
             addMouseListener(new MouseAdapter() {
 
                 public void mouseClicked(MouseEvent e) {
-                    for(int i = 0; i < 10; i++){
-                        for(int j = 0; j < 10; j++){
-                            if(gridSpaces[i][j].getIsClicked()){
-                                if(!gridSpaces[i][j].isDone) {
+                    for (int i = 0; i < 10; i++) {
+                        for (int j = 0; j < 10; j++) {
+                            if (gridSpaces[i][j].getIsClicked()) {
+                                if (!gridSpaces[i][j].isDone) {
                                     gridSpaces[i][j].setBackground(Color.BLACK);
                                     gridSpaces[i][j].setClicked(false);
-                                    System.out.println(gridSpaces[i][j].getX() + " " + gridSpaces[i][j].getY());
+//                                    System.out.println(gridSpaces[i][j].getX() + " " + gridSpaces[i][j].getY());
                                 }
                             }
                         }
                     }
-                    if(e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
-                        for(int i = 0; i < 10; i++){
-                            for(int j = 0; j < 10; j++){
-                                if(e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50){
-                                    if(e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50){
-                                        if(!gridSpaces[i][j].isDone) {
+                    if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50) {
+                                    if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
+                                        if (!gridSpaces[i][j].isDone) {
                                             gridSpaces[i][j].setBackground(Color.BLUE);
                                             gridSpaces[i][j].setClicked(true);
                                         }
@@ -114,15 +106,15 @@ public class BattleshipGrid extends JPanel {
                     }
                 }
 
-                public void mouseEntered(MouseEvent e){
-                    if(e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+                public void mouseEntered(MouseEvent e) {
+                    if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
                         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
                     } else {
                         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     }
                 }
 
-                public void mouseExited(MouseEvent e){
+                public void mouseExited(MouseEvent e) {
                     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
@@ -153,10 +145,10 @@ public class BattleshipGrid extends JPanel {
 
                 numShipsAssigned++;
 
-                System.out.print("Row: " + row + " Col: " + col);
+//                System.out.print("Row: " + row + " Col: " + col);
             }else{
                 //do nothing cuz theres already a ship there
-                System.out.print("Already ship there");
+//                System.out.print("Already ship there");
             }
         }
 
@@ -179,6 +171,8 @@ public class BattleshipGrid extends JPanel {
 
             setOpaque(true);
             setForeground(defaultBackground);
+            setMinimumSize(new Dimension(50, 50));
+            setMaximumSize(new Dimension(50, 50));
             isShipHere = false;
             row = r;
             column = c;
@@ -215,13 +209,13 @@ public class BattleshipGrid extends JPanel {
 
     }//close CellPane class
 
-    class DragMouseAdapter extends MouseAdapter {
-        public void mousePressed(MouseEvent e) {
-            JComponent c = (JComponent) e.getSource();
-            TransferHandler handler = c.getTransferHandler();
-            handler.exportAsDrag(c, e, TransferHandler.COPY);
-        }
-    }
+//    class DragMouseAdapter extends MouseAdapter {
+//        public void mousePressed(MouseEvent e) {
+//            JComponent c = (JComponent) e.getSource();
+//            TransferHandler handler = c.getTransferHandler();
+//            handler.exportAsDrag(c, e, TransferHandler.COPY);
+//        }
+//    }
 
     public CellPane getTargetedCell(){
         //cycle through the grid cells to find the one clicked
@@ -259,7 +253,7 @@ public class BattleshipGrid extends JPanel {
     public void markShot(int row, int col, boolean hit){
 
         if(hit == true){
-            System.out.print("You hit a ship!");
+//            System.out.print("You hit a ship!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
         }else{
             System.out.print("You missed!!");
@@ -270,7 +264,7 @@ public class BattleshipGrid extends JPanel {
     }
 
     public boolean isGameOver(){
-        System.out.println("checking is game over inside of grid");
+//        System.out.println("checking is game over inside of grid");
         for(int i = 0; i < 10; i++){
             for(int j = 0; j < 10; j++){
                 if(gridSpaces[i][j].isShipHere && !gridSpaces[i][j].isDone){
@@ -278,7 +272,7 @@ public class BattleshipGrid extends JPanel {
                 }
             }
         }
-        System.out.println("Game is over");
+//        System.out.println("Game is over");
         return true;
     }
 
