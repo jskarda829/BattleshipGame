@@ -64,10 +64,6 @@ public class BattleshipDisplay extends JFrame {
             }
         });
 
-
-
-
-
         add(IPAddress);
         add(hostButton);
         add(clientButton);
@@ -96,10 +92,13 @@ public class BattleshipDisplay extends JFrame {
         messageBox = new JTextArea();
         //Set behavior of the messagebox/scrollpane
         messageBox.setEditable(false);
+        messageBox.setAutoscrolls(true);
         JScrollPane j = new JScrollPane(messageBox);
         j.setBounds(150, 600, 1000, 100);
         j.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         j.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        j.setAutoscrolls(true);
+        j.setWheelScrollingEnabled(true);
         //set behavior of the text box for typing messages
         enterText.setBounds(150, 720, 930, 20);
         enterText.setFocusable(true);
@@ -171,7 +170,7 @@ public class BattleshipDisplay extends JFrame {
         fireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Taking a shot!");
+//                System.out.println("Taking a shot!");
                 //get the row and col of the clicked targeted cell to send to other player
                 BattleshipGrid.CellPane temp = null;
 
@@ -189,7 +188,7 @@ public class BattleshipDisplay extends JFrame {
 
 
                 }else{
-                    System.out.println("Temp is null");
+//                    System.out.println("Temp is null");
                 }
 
             }
@@ -226,7 +225,7 @@ public class BattleshipDisplay extends JFrame {
     }//close loadBoard()
 
     private void setRandomShips(){
-        print("Assigning random ships");
+//        print("Assigning random ships");
         boolean shipsAssigned = false;
 
         shipsAssigned = bfgBottom.assignRandomShips();
@@ -236,11 +235,11 @@ public class BattleshipDisplay extends JFrame {
         if(shipsAssigned == true){
             //send ships ready signal
             if(isClient){
-                print("setRandomShips() ships assigned is true, isClient is trur");
+//                print("setRandomShips() ships assigned is true, isClient is trur");
                 client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
                 clientShips = true;
             } else {
-                print("setRandomShips() ships assigned is true, isClient is false");
+//                print("setRandomShips() ships assigned is true, isClient is false");
                 serverShips = true;
                 server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
                 startGameIfReady();
@@ -266,16 +265,16 @@ public class BattleshipDisplay extends JFrame {
          */
 
         String TAG = "startGameIfReady()";
-        printInfo(TAG);
+//        printInfo(TAG);
 
         if((serverShips == true) && (clientShips == true)){
-            System.out.println("Ready to start game");
+//            System.out.println("Ready to start game");
             server.send(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START, null, null);
             messageBox.append("**_Game Ready to Start_**\n");
             gameReadyToStart = true;
             startTurn();
         }else {
-            System.out.println("Not Ready to start game");
+//            System.out.println("Not Ready to start game");
 
 
         }
@@ -286,10 +285,10 @@ public class BattleshipDisplay extends JFrame {
     }
 
     public void printInfo(String TAG){
-        print(TAG);
-        print("isClient: " + isClient);
-        print("serverShips: " + serverShips);
-        print("clientShips: " + clientShips);
+//        print(TAG);
+//        print("isClient: " + isClient);
+//        print("serverShips: " + serverShips);
+//        print("clientShips: " + clientShips);
     }
 
     public void startTurn(){
