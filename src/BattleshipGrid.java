@@ -63,6 +63,7 @@ public class BattleshipGrid extends JPanel {
 
             gbc.gridx = 10;
             gbc.gridy = 0;
+            /*
             JLabel jl = null;
             try {
                 jl = new JLabel(new ImageIcon(new URL("http://i.stack.imgur.com/8BGfi.png")));
@@ -81,8 +82,21 @@ public class BattleshipGrid extends JPanel {
                 }
             }
 
-
             add(jl, gbc);
+            */
+            String imageFile = "8BGfi.png";
+            int imageWidth = 50, imageHeight = 50;
+            Image image = Toolkit.getDefaultToolkit().getImage(DragImage.class.getResource(imageFile));
+            image = image.getScaledInstance(imageWidth, imageHeight, Image.SCALE_DEFAULT);
+            DragImage dragImage = new DragImage(image);
+            dragImage.setPreferredSize(new Dimension(48, 48));
+
+            dragImage.addMouseListener(listener);
+            dragImage.setTransferHandler(new TransferHandler("icon"));
+
+            add(new JLabelDragable(image), gbc);
+
+
             addMouseListener(new MouseAdapter() {
 
                 public void mouseClicked(MouseEvent e) {
