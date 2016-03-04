@@ -78,6 +78,43 @@ public class BattleshipGrid extends JPanel {
             }
             add(c, gbc);
 
+            //Set gridbagcontraints for Battleship
+            gbc.gridx = 10;
+            gbc.gridy = 6;
+            gbc.gridheight = 4;
+            Battleship b = new Battleship();
+            b.addMouseListener(listener);
+            b.setTransferHandler(new TransferHandler("icon"));
+            add(b, gbc);
+
+            //set gridbagconstraints for destroyer
+            gbc.gridx = 11;
+            gbc.gridy = 0;
+            gbc.gridheight = 3;
+            Destroyer d = new Destroyer();
+            d.addMouseListener(listener);
+            d.setTransferHandler(new TransferHandler("icon"));
+            add(d, gbc);
+
+            //set gridbagconstraints for submarine
+            gbc.gridx = 11;
+            gbc. gridy = 4;
+            gbc.gridheight = 3;
+            Submarine s = new Submarine();
+            s.addMouseListener(listener);
+            s.setTransferHandler(new TransferHandler("icon"));
+            add(s, gbc);
+
+            //set gridbagcontraints for patrol boat
+            gbc.gridx = 11;
+            gbc.gridy = 8;
+            gbc.gridheight = 2;
+            PatrolBoat pb = new PatrolBoat();
+            pb.addMouseListener(listener);
+            pb.setTransferHandler(new TransferHandler("icon"));
+            add(pb, gbc);
+
+
             addMouseListener(new MouseAdapter() {
 
                 public void mouseClicked(MouseEvent e) {
