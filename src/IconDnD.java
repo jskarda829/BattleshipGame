@@ -14,13 +14,13 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.TransferHandler;
-class DragMouseAdapter extends MouseAdapter {
-    public void mousePressed(MouseEvent e) {
-        JComponent c = (JComponent) e.getSource();
-        TransferHandler handler = c.getTransferHandler();
-        handler.exportAsDrag(c, e, TransferHandler.COPY);
-    }
-}
+//class DragMouseAdapter extends MouseAdapter {
+//    public void mousePressed(MouseEvent e) {
+//        JComponent c = (JComponent) e.getSource();
+//        TransferHandler handler = c.getTransferHandler();
+//        handler.exportAsDrag(c, e, TransferHandler.COPY);
+//    }
+//}
 public class IconDnD {
     public static void main(String[] args) throws MalformedURLException {
         JFrame f = new JFrame("Icon Drag & Drop");
