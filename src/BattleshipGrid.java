@@ -68,6 +68,7 @@ public class BattleshipGrid extends JPanel {
             Carrier c = new Carrier();
             c.addMouseListener(new ShipMouseAdapter(shipBeingDragged, gridSpaces));
             //c.setTransferHandler(new TransferHandler("icon"));
+            c.setName("Carrier");
 
             ImageIcon ii = new ImageIcon("src/carrier_1.png");
 
