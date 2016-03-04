@@ -96,8 +96,9 @@ public class BattleshipGrid extends JPanel {
             gbc.gridy = 0;
             gbc.gridheight = 3;
             Destroyer d = new Destroyer();
-            d.addMouseListener(listener);
-            d.setTransferHandler(new TransferHandler("icon"));
+            d.addMouseListener(shipListener);
+            d.setName("Destroyer");
+            //d.setTransferHandler(new TransferHandler("icon"));
             add(d, gbc);
 
             //set gridbagconstraints for submarine
@@ -105,8 +106,9 @@ public class BattleshipGrid extends JPanel {
             gbc. gridy = 4;
             gbc.gridheight = 3;
             Submarine s = new Submarine();
-            s.addMouseListener(listener);
-            s.setTransferHandler(new TransferHandler("icon"));
+            s.addMouseListener(shipListener);
+            s.setName("Sub");
+            //s.setTransferHandler(new TransferHandler("icon"));
             add(s, gbc);
 
             //set gridbagcontraints for patrol boat
@@ -114,8 +116,9 @@ public class BattleshipGrid extends JPanel {
             gbc.gridy = 8;
             gbc.gridheight = 2;
             PatrolBoat pb = new PatrolBoat();
-            pb.addMouseListener(listener);
-            pb.setTransferHandler(new TransferHandler("icon"));
+            pb.addMouseListener(shipListener);
+            pb.setName("PatrolBoat");
+            //pb.setTransferHandler(new TransferHandler("icon"));
             add(pb, gbc);
 
 
