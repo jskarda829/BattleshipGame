@@ -14,13 +14,16 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.TransferHandler;
-//class DragMouseAdapter extends MouseAdapter {
-//    public void mousePressed(MouseEvent e) {
-//        JComponent c = (JComponent) e.getSource();
-//        TransferHandler handler = c.getTransferHandler();
-//        handler.exportAsDrag(c, e, TransferHandler.COPY);
-//    }
-//}
+
+/*
+class DragMouseAdapter extends MouseAdapter {
+    public void mousePressed(MouseEvent e) {
+        JComponent c = (JComponent) e.getSource();
+        TransferHandler handler = c.getTransferHandler();
+        handler.exportAsDrag(c, e, TransferHandler.COPY);
+    }
+}
+*/
 public class IconDnD {
     public static void main(String[] args) throws MalformedURLException {
         JFrame f = new JFrame("Icon Drag & Drop");
@@ -36,7 +39,7 @@ public class IconDnD {
         JLabel label1 = new JLabel(icon1, JLabel.CENTER);
         JLabel label2 = new JLabel(icon3, JLabel.CENTER);
 
-        MouseListener listener = new DragMouseAdapter();
+        MouseListener listener = new DragMouseAdapter2();
         label1.addMouseListener(listener);
         label2.addMouseListener(listener);
 
@@ -52,5 +55,15 @@ public class IconDnD {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         f.setVisible(true);
+    }
+    public static class DragMouseAdapter2 extends MouseAdapter {
+
+
+        public void mousePressed(MouseEvent e) {
+            JComponent c = (JComponent) e.getSource();
+            TransferHandler handler = c.getTransferHandler();
+            handler.exportAsDrag(c, e, TransferHandler.COPY);
+        }
+
     }
 }
