@@ -16,8 +16,9 @@ public class BattleshipGrid extends JPanel {
 
 
     MouseListener listener;
-    private CellPane[][] gridSpaces;
+    public CellPane[][] gridSpaces;
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
+    public static boolean shipBeingDragged = false;
 
     public BattleshipGrid () {
         listener = new DragMouseAdapter();
@@ -65,8 +66,10 @@ public class BattleshipGrid extends JPanel {
             gbc.gridy = 0;
             gbc.gridheight = 5;
             Carrier c = new Carrier();
-            c.addMouseListener(listener);
-            c.setTransferHandler(new TransferHandler("icon"));
+            c.addMouseListener(new ShipMouseAdapter(shipBeingDragged, gridSpaces));
+            //c.setTransferHandler(new TransferHandler("icon"));
+
+            ImageIcon ii = new ImageIcon("src/carrier_1.png");
 
             for(int i = 0; i < 10; i++){
                 for(int j = 0; j < 10; j++){
@@ -118,6 +121,36 @@ public class BattleshipGrid extends JPanel {
                     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 }
             });
+
+            addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("Dongus!");
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    System.out.println("battleship grid top, Ship being dragged: " + shipBeingDragged);
+                    shipBeingDragged = false;
+                    System.out.println("battleship grid bottom, Ship being dragged: " + shipBeingDragged);
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+
 
         }
         @Override
