@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class BattleshipGrid extends JPanel {
 
-
+    ShipMouseAdapter shipListener;
     MouseListener listener;
     public CellPane[][] gridSpaces;
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
@@ -62,11 +62,13 @@ public class BattleshipGrid extends JPanel {
                 }
             }
 
+            shipListener = new ShipMouseAdapter(shipBeingDragged, gridSpaces);
+
             gbc.gridx = 10;
             gbc.gridy = 0;
             gbc.gridheight = 5;
             Carrier c = new Carrier();
-            c.addMouseListener(new ShipMouseAdapter(shipBeingDragged, gridSpaces));
+            c.addMouseListener(shipListener);
             //c.setTransferHandler(new TransferHandler("icon"));
             c.setName("Carrier");
 
@@ -84,8 +86,9 @@ public class BattleshipGrid extends JPanel {
             gbc.gridy = 6;
             gbc.gridheight = 4;
             Battleship b = new Battleship();
-            b.addMouseListener(listener);
-            b.setTransferHandler(new TransferHandler("icon"));
+            b.addMouseListener(shipListener);
+            b.setName("Battleship");
+            //b.setTransferHandler(new TransferHandler("icon"));
             add(b, gbc);
 
             //set gridbagconstraints for destroyer

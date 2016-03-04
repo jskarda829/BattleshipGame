@@ -14,9 +14,24 @@ public class ShipMouseAdapter extends MouseAdapter {
     int releasedCol;
     int boardHeight = 10;
     int boardWidth = 10;
+
+    int xOffset = 0;
+    int yOffset = 0;
+    int calculatedX;
+    int calculatedY;
+    int topBound, bottomBound, leftBound, rightBound;
+
     int carrierHeight = 5;
+    int battleshipHeight = 4;
+    int cruiserHeight = 3;
+    int subHeight = 3;
+    int patrolBoatHeight = 2;
 
     String NameCarrier = "Carrier";
+    String NameBattleship = "Battleship";
+    String NameCruiser = "Cruiser";
+    String NameSub = "Sub";
+    String NamePatrolBoat = "PatrolBoat";
 
     String nameOfShipClicked;
 
@@ -33,6 +48,10 @@ public class ShipMouseAdapter extends MouseAdapter {
 
         JComponent c = (JComponent) e.getSource();
         nameOfShipClicked = c.getName();
+        System.out.println("ShipMouseAdapter: ship clicked: " + nameOfShipClicked);
+
+        setOffsets(nameOfShipClicked);
+        setBounds(nameOfShipClicked);
 
     }
 
@@ -45,16 +64,24 @@ public class ShipMouseAdapter extends MouseAdapter {
         System.out.println("e.getX: "  + e.getX() + " e.getY: " + e.getY());
 
 
-        if (e.getX() >= -500 && e.getX() <= 0 && e.getY() <= 500 && e.getY() >= 0) {
-            releasedCol = 9 - (int)(Math.abs(e.getX()) / 50);
-            releasedRow = (int)(e.getY() / 50);
+        if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
+            releasedCol = 9 - (int)((Math.abs(e.getX()) + xOffset) / 50);
+            releasedRow = (int)((e.getY() + yOffset) / 50);
             System.out.println("row: " + releasedRow);
             System.out.println("col: " + releasedCol);
 
             if(nameOfShipClicked.equals(NameCarrier)) {
+
                 if (canDrop(releasedRow, releasedCol, carrierHeight)) {
                     dropCarrier(releasedRow, releasedCol);
                 }
+
+            } else if (nameOfShipClicked.equals(NameBattleship)){
+
+                if (canDrop(releasedRow, releasedCol, battleshipHeight)) {
+                    dropBattleship(releasedRow, releasedCol);
+                }
+
             }
 
         }
@@ -101,7 +128,46 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 4][releasedCol].setIsShipHere(true);
 
+    }
 
+    private void dropBattleship(int releasedRow, int releasedCol){
+
+        //set the images
+        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/battleship_1.png"));
+        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/battleship_2.png"));
+        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/battleship_3.png"));
+        gridSpaces[releasedRow + 3][releasedCol].setIcon(new ImageIcon("pics/battleship_4.png"));
+
+        //set the shipIsHere logic
+        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
+
+    }
+
+    private void setOffsets(String shipName){
+        if(shipName.equals(NameCarrier)){
+            xOffset = yOffset = 0;
+        }else if(shipName.equals(NameBattleship)){
+            yOffset = 300;
+            xOffset = 0;
+        }
+    }
+
+    private void setBounds(String shipName){
+        if(shipName.equals(NameCarrier)){
+            leftBound = -500;
+            rightBound = 0;
+            topBound = 0;
+            bottomBound = 500;
+        }else if(shipName.equals(NameBattleship)){
+            //300 down from carrier
+            leftBound = -500;
+            rightBound = 0;
+            topBound = -300;
+            bottomBound = 200;
+        }
     }
 
 
