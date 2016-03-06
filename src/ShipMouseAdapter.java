@@ -56,6 +56,7 @@ public class ShipMouseAdapter extends MouseAdapter {
         submarine = ss;
         patrolBoat = pbs;
         battleshipGrid = bg;
+
     }
 
     public void mousePressed(MouseEvent e) {
@@ -165,7 +166,19 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 4][releasedCol].setIsShipHere(true);
 
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+        gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+        gridSpaces[releasedRow + 4][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
 
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+        gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
+        gridSpaces[releasedRow + 4][releasedCol].setShipPiece(SocketSignals.FIFTH_PIECE);
 
         carrier.setVisible(false);
 
@@ -185,6 +198,18 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
 
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+        gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+        gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
+
         battleship.setVisible(false);
 
     }
@@ -200,6 +225,16 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
 
         destroyer.setVisible(false);
 
@@ -217,6 +252,16 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
 
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+
         submarine.setVisible(false);
 
     }
@@ -230,6 +275,14 @@ public class ShipMouseAdapter extends MouseAdapter {
         //set the shipIsHere logic
         gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
 
         patrolBoat.setVisible(false);
 

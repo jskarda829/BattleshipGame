@@ -12,9 +12,11 @@ import java.util.Random;
 /**
  * Created by jskarda on 2/16/16.
  */
+
 public class BattleshipGrid extends JPanel {
 
     ShipMouseAdapter shipListener;
+    ShipMovingAdaptor shipMovingAdaptor;
     MouseListener listener;
     public CellPane[][] gridSpaces;
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
@@ -28,7 +30,6 @@ public class BattleshipGrid extends JPanel {
     PatrolBoat pb = new PatrolBoat();
 
     BattleshipGrid battleshipGrid = this;
-
 
     public BattleshipGrid (boolean addShips) {
         listener = new DragMouseAdapter();
@@ -76,6 +77,8 @@ public class BattleshipGrid extends JPanel {
             if(needToAddShips) {
 
                 shipListener = new ShipMouseAdapter(shipBeingDragged, gridSpaces, c, b, d, s, pb, battleshipGrid);
+                shipMovingAdaptor = new ShipMovingAdaptor(gridSpaces, c, b, d, s, pb);
+                addMouseListener(shipMovingAdaptor);
 
                 gbc.gridx = 10;
                 gbc.gridy = 0;
@@ -254,6 +257,8 @@ public class BattleshipGrid extends JPanel {
         private boolean isShipHere = false;
         private int row;
         private int column;
+        private int whichShip; //1 - 5 carrier, battleship, destroyer, sub, patrol boat
+        private int shipPiece; //1 top of ship
 
         public CellPane(int r, int c) {
 
@@ -295,6 +300,29 @@ public class BattleshipGrid extends JPanel {
 
         public void setIsDone(boolean b){isDone = b;}
 
+        public int getWhichShip() {
+            return whichShip;
+        }
+
+        public void setWhichShip(int whichShip) {
+            this.whichShip = whichShip;
+        }
+
+        public int getShipPiece() {
+            return shipPiece;
+        }
+
+        public void setShipPiece(int shipPiece) {
+            this.shipPiece = shipPiece;
+        }
+
+        public void clearCell(){
+            isShipHere = false;
+            whichShip = -1;
+            shipPiece = -1;
+            setIcon(null);
+
+        }
     }//close CellPane class
 
 //    class DragMouseAdapter extends MouseAdapter {
