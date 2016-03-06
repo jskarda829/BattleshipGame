@@ -19,9 +19,11 @@ public class BattleshipGrid extends JPanel {
     public CellPane[][] gridSpaces;
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
     public static boolean shipBeingDragged = false;
+    public boolean needToAddShips;
 
-    public BattleshipGrid () {
+    public BattleshipGrid (boolean addShips) {
         listener = new DragMouseAdapter();
+        needToAddShips = addShips;
         setLayout(new BorderLayout());
         add(new TestPane());
         setVisible(true);
@@ -62,64 +64,70 @@ public class BattleshipGrid extends JPanel {
                 }
             }
 
-            shipListener = new ShipMouseAdapter(shipBeingDragged, gridSpaces);
+            if(needToAddShips) {
 
-            gbc.gridx = 10;
-            gbc.gridy = 0;
-            gbc.gridheight = 5;
-            Carrier c = new Carrier();
-            c.addMouseListener(shipListener);
-            //c.setTransferHandler(new TransferHandler("icon"));
-            c.setName("Carrier");
+                shipListener = new ShipMouseAdapter(shipBeingDragged, gridSpaces);
 
-            ImageIcon ii = new ImageIcon("src/carrier_1.png");
+                gbc.gridx = 10;
+                gbc.gridy = 0;
+                gbc.gridheight = 5;
+                Carrier c = new Carrier();
+                c.addMouseListener(shipListener);
+                //c.setTransferHandler(new TransferHandler("icon"));
+                c.setName("Carrier");
 
-            for(int i = 0; i < 10; i++){
-                for(int j = 0; j < 10; j++){
-                    gridSpaces[i][j].setTransferHandler(new TransferHandler("icon"));
+                ImageIcon ii = new ImageIcon("src/carrier_1.png");
+
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 0; j < 10; j++) {
+                        gridSpaces[i][j].setTransferHandler(new TransferHandler("icon"));
+                    }
                 }
+                add(c, gbc);
+
+                //Set gridbagcontraints for Battleship
+                gbc.gridx = 10;
+                gbc.gridy = 6;
+                gbc.gridheight = 4;
+                Battleship b = new Battleship();
+                b.addMouseListener(shipListener);
+                b.setName("Battleship");
+                //b.setTransferHandler(new TransferHandler("icon"));
+                add(b, gbc);
+
+                //set gridbagconstraints for destroyer
+                gbc.gridx = 11;
+                gbc.gridy = 0;
+                gbc.gridheight = 3;
+                Destroyer d = new Destroyer();
+                d.addMouseListener(shipListener);
+                d.setName("Destroyer");
+                //d.setTransferHandler(new TransferHandler("icon"));
+                add(d, gbc);
+
+                //set gridbagconstraints for submarine
+                gbc.gridx = 11;
+                gbc.gridy = 4;
+                gbc.gridheight = 3;
+                Submarine s = new Submarine();
+                s.addMouseListener(shipListener);
+                s.setName("Sub");
+                //s.setTransferHandler(new TransferHandler("icon"));
+                add(s, gbc);
+
+                //set gridbagcontraints for patrol boat
+                gbc.gridx = 11;
+                gbc.gridy = 8;
+                gbc.gridheight = 2;
+                PatrolBoat pb = new PatrolBoat();
+                pb.addMouseListener(shipListener);
+                pb.setName("PatrolBoat");
+                //pb.setTransferHandler(new TransferHandler("icon"));
+                add(pb, gbc);
+
+            }else{
+                //dont need to add ships to this grid
             }
-            add(c, gbc);
-
-            //Set gridbagcontraints for Battleship
-            gbc.gridx = 10;
-            gbc.gridy = 6;
-            gbc.gridheight = 4;
-            Battleship b = new Battleship();
-            b.addMouseListener(shipListener);
-            b.setName("Battleship");
-            //b.setTransferHandler(new TransferHandler("icon"));
-            add(b, gbc);
-
-            //set gridbagconstraints for destroyer
-            gbc.gridx = 11;
-            gbc.gridy = 0;
-            gbc.gridheight = 3;
-            Destroyer d = new Destroyer();
-            d.addMouseListener(shipListener);
-            d.setName("Destroyer");
-            //d.setTransferHandler(new TransferHandler("icon"));
-            add(d, gbc);
-
-            //set gridbagconstraints for submarine
-            gbc.gridx = 11;
-            gbc. gridy = 4;
-            gbc.gridheight = 3;
-            Submarine s = new Submarine();
-            s.addMouseListener(shipListener);
-            s.setName("Sub");
-            //s.setTransferHandler(new TransferHandler("icon"));
-            add(s, gbc);
-
-            //set gridbagcontraints for patrol boat
-            gbc.gridx = 11;
-            gbc.gridy = 8;
-            gbc.gridheight = 2;
-            PatrolBoat pb = new PatrolBoat();
-            pb.addMouseListener(shipListener);
-            pb.setName("PatrolBoat");
-            //pb.setTransferHandler(new TransferHandler("icon"));
-            add(pb, gbc);
 
 
             addMouseListener(new MouseAdapter() {

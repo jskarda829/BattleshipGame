@@ -83,9 +83,9 @@ public class BattleshipDisplay extends JFrame {
         //Instantiate components
        // bfgBottom = new BattleshipGrid();
         //bfgBottom.setLocation(0, 0);
-        bfgBottom = new BattleshipGrid();
+        bfgBottom = new BattleshipGrid(true);
         bfgBottom.setBounds(700, 15, 600,500);
-        bfgTop = new BattleshipGrid();
+        bfgTop = new BattleshipGrid(false);
         bfgTop.setBounds(100, 15, 600, 500);
         sendButton = new JButton("Send");
         enterText = new JTextField("Enter message");
@@ -373,7 +373,7 @@ public class BattleshipDisplay extends JFrame {
         boolean hit;
 
         hit = bfgBottom.markShot(row, col);
-        BattleshipGrid.CellPane t = new BattleshipGrid().new CellPane(row, col);
+        BattleshipGrid.CellPane t = new BattleshipGrid(false).new CellPane(row, col);
 
         if(hit == true){
             //a ship was hit so send the hit signal
