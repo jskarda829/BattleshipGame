@@ -31,4 +31,5 @@ public class SocketSignals {
     public static final int THIRD_PIECE = 3;
     public static final int FOURTH_PIECE = 4;
     public static final int FIFTH_PIECE = 5;
+
 }
