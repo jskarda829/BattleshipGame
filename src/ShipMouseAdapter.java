@@ -35,10 +35,27 @@ public class ShipMouseAdapter extends MouseAdapter {
 
     String nameOfShipClicked;
 
+    Carrier carrier;
+    Battleship battleship;
+    Destroyer destroyer;
+    Submarine submarine;
+    PatrolBoat patrolBoat;
 
-    public ShipMouseAdapter(boolean b, BattleshipGrid.CellPane[][] g){
+    boolean didMoveOver = false;
+
+    BattleshipGrid battleshipGrid;
+
+
+
+    public ShipMouseAdapter(boolean b, BattleshipGrid.CellPane[][] g, Carrier cs, Battleship bs, Destroyer ds, Submarine ss, PatrolBoat pbs, BattleshipGrid bg){
         shipBeingDragged = b;
         gridSpaces = g;
+        carrier = cs;
+        battleship = bs;
+        destroyer = ds;
+        submarine = ss;
+        patrolBoat = pbs;
+        battleshipGrid = bg;
     }
 
     public void mousePressed(MouseEvent e) {
@@ -148,6 +165,10 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 4][releasedCol].setIsShipHere(true);
 
+
+
+        carrier.setVisible(false);
+
     }
 
     private void dropBattleship(int releasedRow, int releasedCol){
@@ -164,6 +185,8 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
 
+        battleship.setVisible(false);
+
     }
 
     private void dropDestroyer(int releasedRow, int releasedCol){
@@ -177,6 +200,8 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+
+        destroyer.setVisible(false);
 
     }
 
@@ -192,6 +217,8 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
 
+        submarine.setVisible(false);
+
     }
 
     private void dropPatrolBoat(int releasedRow, int releasedCol){
@@ -204,6 +231,8 @@ public class ShipMouseAdapter extends MouseAdapter {
         gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
         gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
 
+        patrolBoat.setVisible(false);
+
     }
 
     private void setOffsets(String shipName){
@@ -213,14 +242,30 @@ public class ShipMouseAdapter extends MouseAdapter {
             yOffset = 300;
             xOffset = 0;
         }else if(shipName.equals(NameDestroyer)){
+            if(checkIfMovedOver()) {
+                //ships moved over so 25 left of before
+                xOffset = 0;
+            }else{
+                xOffset = 50;
+            }
             yOffset = 0;
-            xOffset = 50;
+
         }else if(shipName.equals(NameSub)){
+            if(checkIfMovedOver()) {
+                //ships moved over so 25 left of before
+                xOffset = 0;
+            }else{
+                xOffset = 50;
+            }
             yOffset = 200;
-            xOffset = 50;
         }else if(shipName.equals(NamePatrolBoat)){
+            if(checkIfMovedOver()) {
+                //ships moved over so 25 left of before
+                xOffset = 0;
+            }else{
+                xOffset = 50;
+            }
             yOffset = 400;
-            xOffset = 50;
         }
     }
 
@@ -255,6 +300,18 @@ public class ShipMouseAdapter extends MouseAdapter {
             topBound = -400;
             bottomBound = 100;
         }
+    }
+
+    private boolean checkIfMovedOver(){
+
+        if(carrier.isVisible() && battleship.isVisible()){
+            //did not move over
+            return false;
+        }else{
+            return true;
+        }
+
+
     }
 
     private void print(String s){

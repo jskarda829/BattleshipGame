@@ -21,6 +21,15 @@ public class BattleshipGrid extends JPanel {
     public static boolean shipBeingDragged = false;
     public boolean needToAddShips;
 
+    Carrier c = new Carrier();
+    Battleship b = new Battleship();
+    Destroyer d = new Destroyer();
+    Submarine s = new Submarine();
+    PatrolBoat pb = new PatrolBoat();
+
+    BattleshipGrid battleshipGrid = this;
+
+
     public BattleshipGrid (boolean addShips) {
         listener = new DragMouseAdapter();
         needToAddShips = addShips;
@@ -66,30 +75,24 @@ public class BattleshipGrid extends JPanel {
 
             if(needToAddShips) {
 
-                shipListener = new ShipMouseAdapter(shipBeingDragged, gridSpaces);
+                shipListener = new ShipMouseAdapter(shipBeingDragged, gridSpaces, c, b, d, s, pb, battleshipGrid);
 
                 gbc.gridx = 10;
                 gbc.gridy = 0;
                 gbc.gridheight = 5;
-                Carrier c = new Carrier();
+                //Carrier c = new Carrier();
                 c.addMouseListener(shipListener);
-                //c.setTransferHandler(new TransferHandler("icon"));
                 c.setName("Carrier");
 
                 ImageIcon ii = new ImageIcon("src/carrier_1.png");
 
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 10; j++) {
-                        gridSpaces[i][j].setTransferHandler(new TransferHandler("icon"));
-                    }
-                }
                 add(c, gbc);
 
                 //Set gridbagcontraints for Battleship
                 gbc.gridx = 10;
                 gbc.gridy = 6;
                 gbc.gridheight = 4;
-                Battleship b = new Battleship();
+                //Battleship b = new Battleship();
                 b.addMouseListener(shipListener);
                 b.setName("Battleship");
                 //b.setTransferHandler(new TransferHandler("icon"));
@@ -99,7 +102,7 @@ public class BattleshipGrid extends JPanel {
                 gbc.gridx = 11;
                 gbc.gridy = 0;
                 gbc.gridheight = 3;
-                Destroyer d = new Destroyer();
+                //Destroyer d = new Destroyer();
                 d.addMouseListener(shipListener);
                 d.setName("Destroyer");
                 //d.setTransferHandler(new TransferHandler("icon"));
@@ -109,7 +112,7 @@ public class BattleshipGrid extends JPanel {
                 gbc.gridx = 11;
                 gbc.gridy = 4;
                 gbc.gridheight = 3;
-                Submarine s = new Submarine();
+                //Submarine s = new Submarine();
                 s.addMouseListener(shipListener);
                 s.setName("Sub");
                 //s.setTransferHandler(new TransferHandler("icon"));
@@ -119,7 +122,7 @@ public class BattleshipGrid extends JPanel {
                 gbc.gridx = 11;
                 gbc.gridy = 8;
                 gbc.gridheight = 2;
-                PatrolBoat pb = new PatrolBoat();
+                //PatrolBoat pb = new PatrolBoat();
                 pb.addMouseListener(shipListener);
                 pb.setName("PatrolBoat");
                 //pb.setTransferHandler(new TransferHandler("icon"));
