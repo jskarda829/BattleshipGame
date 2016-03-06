@@ -36,6 +36,10 @@ public class ShipMovingAdaptor extends MouseAdapter{
     int subHeight = 3;
     int patrolBoatHeight = 2;
 
+    int xOffset = 0;
+    boolean leftShipsGone;
+    boolean rightShipsGone;
+
     String TAG = "ShipMovingAdaptor";
 
     BattleshipGrid.CellPane[][] gridSpaces;
@@ -58,15 +62,29 @@ public class ShipMovingAdaptor extends MouseAdapter{
          *  -
         */
 
+        setShipsGone();
+
+        //check if there are offsets that need to be applied
+        if(leftShipsGone && rightShipsGone){
+            xOffset = 50;
+        }else if(leftShipsGone && !rightShipsGone){
+            xOffset = 25;
+        }else if(rightShipsGone && !leftShipsGone){
+            xOffset = 25;
+        }
+
+
+
         if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
-            colClicked = (int)((Math.abs(e.getX())) / 50);
+            colClicked = (int)((e.getX() - xOffset) / 50);
             rowClicked = (int)((e.getY()) / 50);
             System.out.println(TAG + " row: " + rowClicked);
             System.out.println(TAG + " col: " + colClicked);
 
             whichShipWasClicked = getShipThere();
+            print("whichShipWasClicked: " + whichShipWasClicked);
             clickedShipVertical = getVertical();
-
+            print("clickedShipVertical: " + clickedShipVertical);
 
         }
 
@@ -79,7 +97,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
          */
 
         if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
-            colReleased = (int)((Math.abs(e.getX())) / 50);
+            colReleased = (int)((e.getX() - xOffset) / 50);
             rowReleased = (int)((e.getY()) / 50);
             System.out.println(TAG + " row: " + rowReleased);
             System.out.println(TAG + " col: " + colReleased);
@@ -88,18 +106,22 @@ public class ShipMovingAdaptor extends MouseAdapter{
             if(whichShipWasClicked == SocketSignals.CARRIER_INT) {
 
                 if (canDrop(rowReleased, colReleased, carrierHeight)) {
-                    deleteOldShip();
+                    deleteOldShip(carrierHeight);
                     dropCarrier(rowReleased, colReleased);
 
                 }
 
-            } /*else if (nameOfShipClicked.equals(NameBattleship)){
+            } else if (whichShipWasClicked == SocketSignals.BATTLESHIP_INT){
 
-                if (canDrop(releasedRow, releasedCol, battleshipHeight)) {
-                    dropBattleship(releasedRow, releasedCol);
+                print("Clicked battleship");
+
+                if (canDrop(rowReleased, colReleased, battleshipHeight)) {
+                    print("Can drop the battleship");
+                    deleteOldShip(battleshipHeight);
+                    dropBattleship(rowReleased, colReleased);
                 }
 
-            }else if (nameOfShipClicked.equals(NameDestroyer)){
+            }/*else if (nameOfShipClicked.equals(NameDestroyer)){
 
                 if (canDrop(releasedRow, releasedCol, destroyerHeight)) {
                     dropDestroyer(releasedRow, releasedCol);
@@ -125,18 +147,12 @@ public class ShipMovingAdaptor extends MouseAdapter{
 
     }
 
-    private int getShipThere(){
 
-        if(gridSpaces[rowClicked][colClicked].getIsShipHere()){
-            return gridSpaces[rowClicked][colClicked].getWhichShip();
-        }else {
-            return -1;
-        }
-    }
 
     private boolean canDrop(int releasedRow, int releasedCol, int shipHight){
 
         if(clickedShipVertical){
+            print("ship is vertical");
             //ship is vertical
             //check for height out of bounds problems
             if(releasedRow <= (boardHeight - shipHight)){
@@ -151,7 +167,10 @@ public class ShipMovingAdaptor extends MouseAdapter{
             for(int i = releasedRow; i < (releasedRow + shipHight); i++){
                 if((gridSpaces[i][releasedCol].getIsShipHere()) && (!isSameShip(whichShipWasClicked,gridSpaces[i][releasedCol]))){
                     //there is a ship here and cannot place new ship here
+                    print("another ship there, cannot move ship");
                     return false;
+                }else{
+                    print("not another ship there, its ok to drop there");
                 }
             }
 
@@ -161,8 +180,19 @@ public class ShipMovingAdaptor extends MouseAdapter{
             //ship is sideways
         }
 
+        print("At the end of can drop, it is false");
+
         return false;
 
+    }
+
+    private int getShipThere(){
+
+        if(gridSpaces[rowClicked][colClicked].getIsShipHere()){
+            return gridSpaces[rowClicked][colClicked].getWhichShip();
+        }else {
+            return -1;
+        }
     }
 
     private boolean isSameShip(int whichShip, BattleshipGrid.CellPane cellPane){
@@ -177,11 +207,13 @@ public class ShipMovingAdaptor extends MouseAdapter{
     private boolean getVertical(){
         if(whichShipWasClicked == SocketSignals.CARRIER_INT){
             return carrier.getIsVertical();
+        }if(whichShipWasClicked == SocketSignals.BATTLESHIP_INT){
+            return battleship.getIsVertical();
         }
         return false;
     }
 
-    private void deleteOldShip(){
+    private void deleteOldShip(int shipLength){
 
         BattleshipGrid.CellPane temp;
         int firstPieceRow, firstPieceCol;
@@ -195,13 +227,19 @@ public class ShipMovingAdaptor extends MouseAdapter{
 
             if(whichShipWasClicked == SocketSignals.CARRIER_INT){
 
-                gridSpaces[firstPieceRow][firstPieceCol].clearCell();
-                gridSpaces[firstPieceRow + 1][firstPieceCol].clearCell();
-                gridSpaces[firstPieceRow + 2][firstPieceCol].clearCell();
-                gridSpaces[firstPieceRow + 3][firstPieceCol].clearCell();
-                gridSpaces[firstPieceRow + 4][firstPieceCol].clearCell();
+                for(int i = firstPieceRow; i < firstPieceRow + shipLength; i++){
+                    gridSpaces[i][firstPieceCol].clearCell();
+                }
+
+            } else if(whichShipWasClicked == SocketSignals.BATTLESHIP_INT){
+
+                for(int i = firstPieceRow; i < firstPieceRow + shipLength; i++){
+                    gridSpaces[i][firstPieceCol].clearCell();
+                }
 
             }
+
+
         }else{
             //horizontal ship
         }
@@ -237,7 +275,34 @@ public class ShipMovingAdaptor extends MouseAdapter{
         gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
         gridSpaces[releasedRow + 4][releasedCol].setShipPiece(SocketSignals.FIFTH_PIECE);
 
-        carrier.setVisible(false);
+    }
+
+    private void dropBattleship(int releasedRow, int releasedCol){
+
+        //set the images
+        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/battleship_1.png"));
+        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/battleship_2.png"));
+        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/battleship_3.png"));
+        gridSpaces[releasedRow + 3][releasedCol].setIcon(new ImageIcon("pics/battleship_4.png"));
+
+        //set the shipIsHere logic
+        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+        gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+        gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
+
 
     }
 
@@ -259,6 +324,20 @@ public class ShipMovingAdaptor extends MouseAdapter{
         return null;
     }
 
+    private void print(String s){
+        System.out.println(s);
+    }
+
+    private void setShipsGone(){
+
+        if(!carrier.isVisible() && !battleship.isVisible()){
+            leftShipsGone = true;
+        }
+
+        if(!destroyer.isVisible() && !submarine.isVisible() && !patrolBoat.isVisible()){
+            rightShipsGone = true;
+        }
+    }
 
 
 
