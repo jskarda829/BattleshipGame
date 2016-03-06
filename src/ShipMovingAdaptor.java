@@ -62,6 +62,10 @@ public class ShipMovingAdaptor extends MouseAdapter{
          *  -
         */
 
+        print("e.getX(): " + e.getX());
+        print("e.getY(): " + e.getY());
+
+        setBounds();
         setShipsGone();
 
         //check if there are offsets that need to be applied
@@ -101,7 +105,8 @@ public class ShipMovingAdaptor extends MouseAdapter{
             rowReleased = (int)((e.getY()) / 50);
             System.out.println(TAG + " row: " + rowReleased);
             System.out.println(TAG + " col: " + colReleased);
-
+            print("e.getX(): " + e.getX());
+            print("e.getY(): " + e.getY());
 
             if(whichShipWasClicked == SocketSignals.CARRIER_INT) {
 
@@ -128,19 +133,21 @@ public class ShipMovingAdaptor extends MouseAdapter{
                     dropDestroyer(rowReleased, colReleased);
                 }
 
-            }/*else if (nameOfShipClicked.equals(NameSub)){
+            }else if (whichShipWasClicked == SocketSignals.SUBMARINE_INT){
 
-                if (canDrop(releasedRow, releasedCol, subHeight)) {
-                    dropSub(releasedRow, releasedCol);
+                if (canDrop(rowReleased, colReleased, subHeight)) {
+                    deleteOldShip(subHeight);
+                    dropSub(rowReleased, colReleased);
                 }
 
-            }else if (nameOfShipClicked.equals(NamePatrolBoat)){
+            }else if (whichShipWasClicked == SocketSignals.PATROL_BOAT_INT){
 
-                if (canDrop(releasedRow, releasedCol, patrolBoatHeight)) {
-                    dropPatrolBoat(releasedRow, releasedCol);
+                if (canDrop(rowReleased, colReleased, patrolBoatHeight)) {
+                    deleteOldShip(patrolBoatHeight);
+                    dropPatrolBoat(rowReleased, colReleased);
                 }
 
-            }*/
+            }
 
         }
 
@@ -179,6 +186,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
 
         }else{
             //ship is sideways
+            //TODO
         }
 
         print("At the end of can drop, it is false");
@@ -212,6 +220,10 @@ public class ShipMovingAdaptor extends MouseAdapter{
             return battleship.getIsVertical();
         }else if(whichShipWasClicked == SocketSignals.DESTROYER_INT){
             return destroyer.getIsVertical();
+        }else if(whichShipWasClicked == SocketSignals.SUBMARINE_INT){
+            return submarine.getIsVertical();
+        }else if(whichShipWasClicked == SocketSignals.PATROL_BOAT_INT){
+            return patrolBoat.getIsVertical();
         }
         return false;
     }
@@ -345,6 +357,50 @@ public class ShipMovingAdaptor extends MouseAdapter{
 
     }
 
+    private void dropSub(int releasedRow, int releasedCol){
+
+        //set the images
+        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/sub_1.png"));
+        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/sub_2.png"));
+        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/sub_3.png"));
+
+        //set the shipIsHere logic
+        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+
+    }
+
+    private void dropPatrolBoat(int releasedRow, int releasedCol){
+
+        //set the images
+        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_1.png"));
+        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_2.png"));
+
+        //set the shipIsHere logic
+        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+
+    }
+
     private BattleshipGrid.CellPane getFirstPiece(){
         if(clickedShipVertical) {
             if (gridSpaces[rowClicked][colClicked].getShipPiece() == SocketSignals.FIRST_PIECE) {
@@ -375,6 +431,19 @@ public class ShipMovingAdaptor extends MouseAdapter{
 
         if(!destroyer.isVisible() && !submarine.isVisible() && !patrolBoat.isVisible()){
             rightShipsGone = true;
+        }
+    }
+
+    private void setBounds(){
+        if(leftShipsGone && rightShipsGone){
+            leftBound = 50;
+            rightBound = 550;
+        }else if(leftShipsGone && !rightShipsGone){
+            leftBound = 25;
+            rightBound = 525;
+        }else if(rightShipsGone && !leftShipsGone){
+            leftBound = 25;
+            rightBound = 525;
         }
     }
 
