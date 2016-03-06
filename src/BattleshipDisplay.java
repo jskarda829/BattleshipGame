@@ -48,6 +48,7 @@ public class BattleshipDisplay extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isClient = false;
+                getContentPane().setBackground(Color.gray);
                 loadBoard();
             }
         });
