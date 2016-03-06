@@ -121,13 +121,14 @@ public class ShipMovingAdaptor extends MouseAdapter{
                     dropBattleship(rowReleased, colReleased);
                 }
 
-            }/*else if (nameOfShipClicked.equals(NameDestroyer)){
+            }else if(whichShipWasClicked == SocketSignals.DESTROYER_INT){
 
-                if (canDrop(releasedRow, releasedCol, destroyerHeight)) {
-                    dropDestroyer(releasedRow, releasedCol);
+                if (canDrop(rowReleased, colReleased, destroyerHeight)) {
+                    deleteOldShip(destroyerHeight);
+                    dropDestroyer(rowReleased, colReleased);
                 }
 
-            }else if (nameOfShipClicked.equals(NameSub)){
+            }/*else if (nameOfShipClicked.equals(NameSub)){
 
                 if (canDrop(releasedRow, releasedCol, subHeight)) {
                     dropSub(releasedRow, releasedCol);
@@ -207,8 +208,10 @@ public class ShipMovingAdaptor extends MouseAdapter{
     private boolean getVertical(){
         if(whichShipWasClicked == SocketSignals.CARRIER_INT){
             return carrier.getIsVertical();
-        }if(whichShipWasClicked == SocketSignals.BATTLESHIP_INT){
+        }else if(whichShipWasClicked == SocketSignals.BATTLESHIP_INT){
             return battleship.getIsVertical();
+        }else if(whichShipWasClicked == SocketSignals.DESTROYER_INT){
+            return destroyer.getIsVertical();
         }
         return false;
     }
@@ -225,6 +228,11 @@ public class ShipMovingAdaptor extends MouseAdapter{
             firstPieceRow = temp.getRow();
             firstPieceCol = temp.getColumn();
 
+            for(int i = firstPieceRow; i < firstPieceRow + shipLength; i++){
+                gridSpaces[i][firstPieceCol].clearCell();
+            }
+
+            /*
             if(whichShipWasClicked == SocketSignals.CARRIER_INT){
 
                 for(int i = firstPieceRow; i < firstPieceRow + shipLength; i++){
@@ -237,7 +245,14 @@ public class ShipMovingAdaptor extends MouseAdapter{
                     gridSpaces[i][firstPieceCol].clearCell();
                 }
 
+            } else if(whichShipWasClicked == SocketSignals.DESTROYER_INT){
+
+                for(int i = firstPieceRow; i < firstPieceRow + shipLength; i++){
+                    gridSpaces[i][firstPieceCol].clearCell();
+                }
+
             }
+            */
 
 
         }else{
@@ -303,6 +318,30 @@ public class ShipMovingAdaptor extends MouseAdapter{
         gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
         gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
 
+
+    }
+
+    private void dropDestroyer(int releasedRow, int releasedCol){
+
+        //set the images
+        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/destroyer_1.png"));
+        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/destroyer_2.png"));
+        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/destroyer_3.png"));
+
+        //set the shipIsHere logic
+        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+
+        //set the which ship logic
+        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
 
     }
 
