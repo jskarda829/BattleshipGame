@@ -20,4 +20,16 @@ public class SocketSignals {
     public static final Color BATTLESHIP_COLOR_SHIP_HIT = Color.red;
     public static final Color BATTLESHIP_COLOR_SHIP_MISS = Color.gray;
 
+    public static final int CARRIER_INT = 1;
+    public static final int BATTLESHIP_INT = 2;
+    public static final int DESTROYER_INT = 3;
+    public static final int SUBMARINE_INT = 4;
+    public static final int PATROL_BOAT_INT = 5;
+
+    public static final int FIRST_PIECE = 1;
+    public static final int SECOND_PIECE = 2;
+    public static final int THIRD_PIECE = 3;
+    public static final int FOURTH_PIECE = 4;
+    public static final int FIFTH_PIECE = 5;
+
 }

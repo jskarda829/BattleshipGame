@@ -48,7 +48,6 @@ public class BattleshipDisplay extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isClient = false;
-                getContentPane().setBackground(Color.gray);
                 loadBoard();
             }
         });
@@ -60,6 +59,7 @@ public class BattleshipDisplay extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!IPAddress.getText().equals("")) {
                     isClient = true;
+                    getContentPane().setBackground(Color.gray);
                     loadBoard();
                 }
             }
