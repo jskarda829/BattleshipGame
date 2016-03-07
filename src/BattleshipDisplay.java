@@ -158,15 +158,19 @@ public class BattleshipDisplay extends JFrame {
         assignRandomShipsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //assign random ships
-                setRandomShips();
-                bfgBottom.c.setVisible(false);
-                bfgBottom.b.setVisible(false);
-                bfgBottom.s.setVisible(false);
-                bfgBottom.d.setVisible(false);
-                bfgBottom.pb.setVisible(false);
-                assignRandomShipsButton.setVisible(false);
-                shipsAreReadyButton.setVisible(false);
+                if(bfgBottom.c.isVisible() && bfgBottom.b.isVisible() && bfgBottom.s.isVisible() && bfgBottom.d.isVisible() && bfgBottom.pb.isVisible()) {
+                    //assign random ships
+                    setRandomShips();
+                    bfgBottom.c.setVisible(false);
+                    bfgBottom.b.setVisible(false);
+                    bfgBottom.s.setVisible(false);
+                    bfgBottom.d.setVisible(false);
+                    bfgBottom.pb.setVisible(false);
+                    assignRandomShipsButton.setVisible(false);
+                    shipsAreReadyButton.setVisible(false);
+                } else {
+                    assignRandomShipsButton.setVisible(false);
+                }
             }
         });
 
