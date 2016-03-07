@@ -40,6 +40,20 @@ public class BattleshipGrid extends JPanel {
         setOpaque(true);
     }
 
+    public boolean areShipsPlaced(){
+        int count = 0;
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                if(gridSpaces[i][j].getIsShipHere()){
+                    count++;
+                }
+            }
+        }
+        if(count < 17){
+            return false;
+        }
+        return true;
+    }
     public class TestPane extends JPanel {
 
 
@@ -142,167 +156,24 @@ public class BattleshipGrid extends JPanel {
                     if(!needToAddShips) {
                         changeSpaceSelection(e);
                     } else {
-                        System.out.println("Checking for ship");
-                        if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
-                            for (int i = 0; i < 10; i++) {
-                                for (int j = 0; j < 10; j++) {
-                                    if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50) {
-                                        if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
-                                            if (gridSpaces[i][j].isShipHere) {
-                                                //TODO ADD SHIP ROTATION LOL
-                                                System.out.println("Calling rotate ship");
-                                                rotateShip(i, j);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            repaint();
-                        }
+                       // System.out.println("Checking for ship");
+//                        if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+//                            for (int i = 0; i < 10; i++) {
+//                                for (int j = 0; j < 10; j++) {
+//                                    if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50) {
+//                                        if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
+//                                            if (gridSpaces[i][j].isShipHere) {
+//                                                //TODO ADD SHIP ROTATION LOL
+//                                                System.out.println("Calling rotate ship");
+//                                                //rotateShip(i, j);
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            repaint();
+//                        }
                     }
-                }
-
-                public void rotateShip(int row, int col){
-//                    if(gridSpaces[row][col].whichShip == SocketSignals.CARRIER_INT){
-                    if(1 == SocketSignals.CARRIER_INT){
-//                        int shipPiece = gridSpaces[row][col].shipPiece;
-//                        boolean isVertical = gridSpaces[row][col].isShipVertical;
-                        int shipPiece = 3;
-                        boolean isVertical = true;
-                        boolean canIRotateThisShip = true;
-                        while(shipPiece > 1){
-                            System.out.println("Inside while(shipPiece > 1");
-                            if(isVertical){
-                                row--;
-                                shipPiece--;
-                            } else {
-                                col--;
-                                shipPiece--;
-                            }
-                        }
-                        if(isVertical) {
-                            System.out.println("Inside if(isVertical)");
-                            if(col + 4 > 9){
-                                System.out.println("Setting can i rotate to false in if(col + 4 > 9)");
-                                canIRotateThisShip = false;
-                            }
-                            for (int i = col + 1; i < col + 5; i++) {
-                                if (gridSpaces[row][col].isShipHere){
-                                    System.out.println("Setting can i rotate to false in if (gridSpaces[row][col].isShipHere){");
-                                    //canIRotateThisShip = false;
-                                }
-                            }
-                        } else {
-                            if(row + 4 > 9){
-                                canIRotateThisShip = false;
-                            }
-                            for(int i = row; i < row + 5; i++){
-                                if (gridSpaces[row][col].isShipHere){
-                                    canIRotateThisShip = false;
-                                }
-                            }
-                        }
-                        if(canIRotateThisShip && isVertical){
-                            System.out.println("Inside if(canIRotateThisShip && isVertical)");
-                            for(int i = col + 1; i < col + 5; i++){
-                                gridSpaces[row][col].setIcon(null);
-                                gridSpaces[row][col].setBackground(Color.BLACK);
-                                gridSpaces[row][col].setIsShipHere(false);
-                            }
-                            int space = 2;
-                            for(int i = row + 1; i < row + 5; i++){
-                                System.out.println("Inside for(int i = row + 1; i < row + 5; i++){");
-                                switch(space){
-                                    case 2:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_2"));
-                                        break;
-                                    case 3:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_3"));
-                                        break;
-                                    case 4:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_4"));
-                                        break;
-                                    case 5:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_5"));
-                                        break;
-                                }
-                                space++;
-                            }
-                        } else if(canIRotateThisShip && !isVertical){
-                            for(int i = row + 1; i < row + 5; i++){
-                                gridSpaces[row][col].setIcon(null);
-                                gridSpaces[row][col].setBackground(Color.BLACK);
-                                gridSpaces[row][col].setIsShipHere(false);
-                            }
-                            int space = 2;
-                            for(int i = col + 1; i < col + 5; i++){
-                                switch(space){
-                                    case 2:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_2"));
-                                        break;
-                                    case 3:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_3"));
-                                        break;
-                                    case 4:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_4"));
-                                        break;
-                                    case 5:
-                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_5"));
-                                        break;
-                                }
-                                space++;
-                            }
-                        }
-                    } else if(gridSpaces[row][col].whichShip == SocketSignals.BATTLESHIP_INT){
-                        int shipPiece = gridSpaces[row][col].shipPiece;
-                        boolean isVertical = gridSpaces[row][col].isShipVertical;
-                        while(shipPiece > 1){
-                            if(isVertical){
-                                row--;
-                                shipPiece--;
-                            } else {
-                                col--;
-                                shipPiece--;
-                            }
-                        }
-                    }else if(gridSpaces[row][col].whichShip == SocketSignals.DESTROYER_INT){
-                        int shipPiece = gridSpaces[row][col].shipPiece;
-                        boolean isVertical = gridSpaces[row][col].isShipVertical;
-                        while(shipPiece > 1){
-                            if(isVertical){
-                                row--;
-                                shipPiece--;
-                            } else {
-                                col--;
-                                shipPiece--;
-                            }
-                        }
-                    }else if(gridSpaces[row][col].whichShip == SocketSignals.SUBMARINE_INT){
-                        int shipPiece = gridSpaces[row][col].shipPiece;
-                        boolean isVertical = gridSpaces[row][col].isShipVertical;
-                        while(shipPiece > 1){
-                            if(isVertical){
-                                row--;
-                                shipPiece--;
-                            } else {
-                                col--;
-                                shipPiece--;
-                            }
-                        }
-                    }else if(gridSpaces[row][col].whichShip == SocketSignals.PATROL_BOAT_INT){
-                        int shipPiece = gridSpaces[row][col].shipPiece;
-                        boolean isVertical = gridSpaces[row][col].isShipVertical;
-                        while(shipPiece > 1){
-                            if(isVertical){
-                                row--;
-                                shipPiece--;
-                            } else {
-                                col--;
-                                shipPiece--;
-                            }
-                        }
-                    }
-                    repaint();
                 }
 
                 public void changeSpaceSelection(MouseEvent e){
@@ -366,7 +237,7 @@ public class BattleshipGrid extends JPanel {
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("Dongus!");
+                    //System.out.println("Dongus!");
                 }
 
                 @Override
@@ -376,9 +247,9 @@ public class BattleshipGrid extends JPanel {
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    System.out.println("battleship grid top, Ship being dragged: " + shipBeingDragged);
+                    //System.out.println("battleship grid top, Ship being dragged: " + shipBeingDragged);
                     shipBeingDragged = false;
-                    System.out.println("battleship grid bottom, Ship being dragged: " + shipBeingDragged);
+                    //System.out.println("battleship grid bottom, Ship being dragged: " + shipBeingDragged);
                 }
 
                 @Override
@@ -405,29 +276,298 @@ public class BattleshipGrid extends JPanel {
     public boolean assignRandomShips(){
         //generate 2 random numbers, row and col to set that cell as filled
         Random random = new Random();
-        int row, col;
+        int row, col, vertical;
         int max = 9, min = 0;
-        int numShipsAssigned = 0;
+        boolean shipAssigned = false;
 
-        while(numShipsAssigned < 2){
+
+        //place carrier
+        while(!shipAssigned) {
             row = (random.nextInt(max - min + 1) + min);
             col = (random.nextInt(max - min + 1) + min);
+            vertical = random.nextInt() % 2;
+            System.out.println(row);
+            System.out.println(col);
+            if (vertical == 1 && row < 6) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row + 1][col].getIsShipHere() && !gridSpaces[row + 2][col].getIsShipHere()
+                        && !gridSpaces[row + 3][col].getIsShipHere() && !gridSpaces[row + 4][col].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row + 1][col].setIsShipHere(true);
+                    gridSpaces[row + 2][col].setIsShipHere(true);
+                    gridSpaces[row + 3][col].setIsShipHere(true);
+                    gridSpaces[row + 4][col].setIsShipHere(true);
 
-            if(gridSpaces[row][col].getIsShipHere() == false) {
-                gridSpaces[row][col].setIsShipHere(true);
-                gridSpaces[row][col].setBackground(COLOR_CELL_HAS_SHIP);
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_1.png"));
+                    gridSpaces[row+1][col].setIcon(new ImageIcon("pics/carrier_2.png"));
+                    gridSpaces[row+2][col].setIcon(new ImageIcon("pics/carrier_3.png"));
+                    gridSpaces[row+3][col].setIcon(new ImageIcon("pics/carrier_4.png"));
+                    gridSpaces[row+4][col].setIcon(new ImageIcon("pics/carrier_5.png"));
 
-                numShipsAssigned++;
+                    gridSpaces[row][col].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row+1][col].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row+2][col].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row+3][col].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row+4][col].setWhichShip(SocketSignals.CARRIER_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row+1][col].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row+2][col].setShipPiece(SocketSignals.THIRD_PIECE);
+                    gridSpaces[row+3][col].setShipPiece(SocketSignals.FOURTH_PIECE);
+                    gridSpaces[row+4][col].setShipPiece(SocketSignals.FIFTH_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(true);
+                    shipAssigned = true;
 
 //                System.out.print("Row: " + row + " Col: " + col);
-            }else{
-                //do nothing cuz theres already a ship there
-//                System.out.print("Already ship there");
+                } else {//do nothing cuz theres already a ship there
+//               System.out.print("Already ship there");
+                }
+            } else if(vertical == 0 && col < 6) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row][col+1].getIsShipHere() && !gridSpaces[row][col+2].getIsShipHere()
+                        && !gridSpaces[row][col+3].getIsShipHere() && !gridSpaces[row][col+4].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row][col+1].setIsShipHere(true);
+                    gridSpaces[row][col+2].setIsShipHere(true);
+                    gridSpaces[row][col+3].setIsShipHere(true);
+                    gridSpaces[row][col+4].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_1 copy.png"));
+                    gridSpaces[row][col+1].setIcon(new ImageIcon("pics/carrier_2 copy.png"));
+                    gridSpaces[row][col+2].setIcon(new ImageIcon("pics/carrier_3 copy.png"));
+                    gridSpaces[row][col+3].setIcon(new ImageIcon("pics/carrier_4 copy.png"));
+                    gridSpaces[row][col+4].setIcon(new ImageIcon("pics/carrier_5 copy.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row][col+1].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row][col+2].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row][col+3].setWhichShip(SocketSignals.CARRIER_INT);
+                    gridSpaces[row][col+4].setWhichShip(SocketSignals.CARRIER_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row][col+1].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row][col+2].setShipPiece(SocketSignals.THIRD_PIECE);
+                    gridSpaces[row][col+3].setShipPiece(SocketSignals.FOURTH_PIECE);
+                    gridSpaces[row][col+4].setShipPiece(SocketSignals.FIFTH_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(false);
+                    shipAssigned = true;
+                }
             }
         }
+        shipAssigned = false;
+        //assign battleship
+        while(!shipAssigned){
+            row = (random.nextInt(max - min + 1) + min);
+            col = (random.nextInt(max - min + 1) + min);
+            vertical = random.nextInt() % 2;
+            if (vertical == 1 && row < 7) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row + 1][col].getIsShipHere() && !gridSpaces[row + 2][col].getIsShipHere()
+                        && !gridSpaces[row + 3][col].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row + 1][col].setIsShipHere(true);
+                    gridSpaces[row + 2][col].setIsShipHere(true);
+                    gridSpaces[row + 3][col].setIsShipHere(true);
 
-        System.out.println();
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/battleship_1.png"));
+                    gridSpaces[row+1][col].setIcon(new ImageIcon("pics/battleship_2.png"));
+                    gridSpaces[row+2][col].setIcon(new ImageIcon("pics/battleship_3.png"));
+                    gridSpaces[row+3][col].setIcon(new ImageIcon("pics/battleship_4.png"));
 
+                    gridSpaces[row][col].setWhichShip(SocketSignals.BATTLESHIP_INT);
+                    gridSpaces[row+1][col].setWhichShip(SocketSignals.BATTLESHIP_INT);
+                    gridSpaces[row+2][col].setWhichShip(SocketSignals.BATTLESHIP_INT);
+                    gridSpaces[row+3][col].setWhichShip(SocketSignals.BATTLESHIP_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row+1][col].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row+2][col].setShipPiece(SocketSignals.THIRD_PIECE);
+                    gridSpaces[row+3][col].setShipPiece(SocketSignals.FOURTH_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(true);
+                    shipAssigned = true;
+
+                } else {
+
+                }
+            } else if(vertical == 0 && col < 7) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row][col+1].getIsShipHere() && !gridSpaces[row][col+2].getIsShipHere()
+                        && !gridSpaces[row][col+3].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row][col+1].setIsShipHere(true);
+                    gridSpaces[row][col+2].setIsShipHere(true);
+                    gridSpaces[row][col+3].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/battleship_1 copy.png"));
+                    gridSpaces[row][col+1].setIcon(new ImageIcon("pics/battleship_2 copy.png"));
+                    gridSpaces[row][col+2].setIcon(new ImageIcon("pics/battleship_3 copy.png"));
+                    gridSpaces[row][col+3].setIcon(new ImageIcon("pics/battleship_4 copy.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.BATTLESHIP_INT);
+                    gridSpaces[row][col+1].setWhichShip(SocketSignals.BATTLESHIP_INT);
+                    gridSpaces[row][col+2].setWhichShip(SocketSignals.BATTLESHIP_INT);
+                    gridSpaces[row][col+3].setWhichShip(SocketSignals.BATTLESHIP_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row][col+1].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row][col+2].setShipPiece(SocketSignals.THIRD_PIECE);
+                    gridSpaces[row][col+3].setShipPiece(SocketSignals.FOURTH_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(false);
+                    shipAssigned = true;
+                }
+            }
+        }
+        shipAssigned = false;
+        //assign destroyer
+        while(!shipAssigned){
+            row = (random.nextInt(max - min + 1) + min);
+            col = (random.nextInt(max - min + 1) + min);
+            vertical = random.nextInt() % 2;
+            if (vertical == 1 && row < 8) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row + 1][col].getIsShipHere() && !gridSpaces[row + 2][col].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row + 1][col].setIsShipHere(true);
+                    gridSpaces[row + 2][col].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/destroyer_1.png"));
+                    gridSpaces[row+1][col].setIcon(new ImageIcon("pics/destroyer_2.png"));
+                    gridSpaces[row+2][col].setIcon(new ImageIcon("pics/destroyer_3.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.DESTROYER_INT);
+                    gridSpaces[row+1][col].setWhichShip(SocketSignals.DESTROYER_INT);
+                    gridSpaces[row+2][col].setWhichShip(SocketSignals.DESTROYER_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row+1][col].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row+2][col].setShipPiece(SocketSignals.THIRD_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(true);
+                    shipAssigned = true;
+
+                } else {
+
+                }
+            } else if(vertical == 0 && col < 8) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row][col+1].getIsShipHere() && !gridSpaces[row][col+2].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row][col+1].setIsShipHere(true);
+                    gridSpaces[row][col+2].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/destroyer_1 copy.png"));
+                    gridSpaces[row][col+1].setIcon(new ImageIcon("pics/destroyer_2 copy.png"));
+                    gridSpaces[row][col+2].setIcon(new ImageIcon("pics/destroyer_3 copy.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.DESTROYER_INT);
+                    gridSpaces[row][col+1].setWhichShip(SocketSignals.DESTROYER_INT);
+                    gridSpaces[row][col+2].setWhichShip(SocketSignals.DESTROYER_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row][col+1].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row][col+2].setShipPiece(SocketSignals.THIRD_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(false);
+                    shipAssigned = true;
+                }
+            }
+        }
+        shipAssigned = false;
+        //assign submarine
+        while(!shipAssigned){
+            row = (random.nextInt(max - min + 1) + min);
+            col = (random.nextInt(max - min + 1) + min);
+            vertical = random.nextInt() % 2;
+            if (vertical == 1 && row < 8) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row + 1][col].getIsShipHere() && !gridSpaces[row + 2][col].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row + 1][col].setIsShipHere(true);
+                    gridSpaces[row + 2][col].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/sub_1.png"));
+                    gridSpaces[row+1][col].setIcon(new ImageIcon("pics/sub_2.png"));
+                    gridSpaces[row+2][col].setIcon(new ImageIcon("pics/sub_3.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+                    gridSpaces[row+1][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+                    gridSpaces[row+2][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row+1][col].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row+2][col].setShipPiece(SocketSignals.THIRD_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(true);
+                    shipAssigned = true;
+
+                } else {
+
+                }
+            } else if(vertical == 0 && col < 8) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row][col+1].getIsShipHere() && !gridSpaces[row][col+2].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row][col+1].setIsShipHere(true);
+                    gridSpaces[row][col+2].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/sub_1 copy.png"));
+                    gridSpaces[row][col+1].setIcon(new ImageIcon("pics/sub_2 copy.png"));
+                    gridSpaces[row][col+2].setIcon(new ImageIcon("pics/sub_3 copy.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+                    gridSpaces[row][col+1].setWhichShip(SocketSignals.SUBMARINE_INT);
+                    gridSpaces[row][col+2].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row][col+1].setShipPiece(SocketSignals.SECOND_PIECE);
+                    gridSpaces[row][col+2].setShipPiece(SocketSignals.THIRD_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(false);
+                    shipAssigned = true;
+                }
+            }
+        }
+        shipAssigned = false;
+        //assign patrol boat
+        while(!shipAssigned){
+            row = (random.nextInt(max - min + 1) + min);
+            col = (random.nextInt(max - min + 1) + min);
+            vertical = random.nextInt() % 2;
+            if (vertical == 1 && row < 9) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row + 1][col].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row + 1][col].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/patrol_boat_1.png"));
+                    gridSpaces[row+1][col].setIcon(new ImageIcon("pics/patrol_boat_2.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+                    gridSpaces[row+1][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row+1][col].setShipPiece(SocketSignals.SECOND_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(true);
+                    shipAssigned = true;
+
+                } else {
+
+                }
+            } else if(vertical == 0 && col < 9) {
+                if (!gridSpaces[row][col].getIsShipHere() && !gridSpaces[row][col+1].getIsShipHere()) {
+                    gridSpaces[row][col].setIsShipHere(true);
+                    gridSpaces[row][col+1].setIsShipHere(true);
+
+                    gridSpaces[row][col].setIcon(new ImageIcon("pics/patrol_boat_1 copy.png"));
+                    gridSpaces[row][col+1].setIcon(new ImageIcon("pics/patrol_boat_2 copy.png"));
+
+                    gridSpaces[row][col].setWhichShip(SocketSignals.SUBMARINE_INT);
+                    gridSpaces[row][col+1].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+                    gridSpaces[row][col].setShipPiece(SocketSignals.FIRST_PIECE);
+                    gridSpaces[row][col+1].setShipPiece(SocketSignals.SECOND_PIECE);
+
+                    gridSpaces[row][col].setIsVertical(false);
+                    shipAssigned = true;
+                }
+            }
+        }
         return true;
     }
 
@@ -509,6 +649,14 @@ public class BattleshipGrid extends JPanel {
             setIcon(null);
 
         }
+
+        public void setIsVertical(boolean b){
+            isShipVertical = b;
+        }
+
+        public boolean getIsVertical(){
+            return isShipVertical;
+        }
     }//close CellPane class
 
 //    class DragMouseAdapter extends MouseAdapter {
@@ -539,7 +687,9 @@ public class BattleshipGrid extends JPanel {
 
         if(gridSpaces[row][col].getIsShipHere() == true){
             System.out.print("Your ship has been hit!");
+            gridSpaces[row][col].setIcon(null);
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
+            gridSpaces[row][col].setIcon(new ImageIcon("pics/giphy.gif"));
             gridSpaces[row][col].setIsDone(true);
             return true;
         }else{
@@ -556,6 +706,8 @@ public class BattleshipGrid extends JPanel {
 
         if(hit == true){
 //            System.out.print("You hit a ship!");
+            gridSpaces[row][col].setIcon(null);
+            gridSpaces[row][col].setIcon(new ImageIcon("pics/giphy.gif"));
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
         }else{
             System.out.print("You missed!!");
