@@ -1,6 +1,9 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.JFrame;
 
 /**
@@ -203,6 +206,8 @@ public class BattleshipDisplay extends JFrame {
         fireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
 //                System.out.println("Taking a shot!");
                 //get the row and col of the clicked targeted cell to send to other player
                 BattleshipGrid.CellPane temp = null;
@@ -211,6 +216,8 @@ public class BattleshipDisplay extends JFrame {
 
                 if(temp != null){
                     //send the targeted coordinates
+
+
 
                     if(isClient){
                         client.send(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING, null, temp);
@@ -510,5 +517,6 @@ public class BattleshipDisplay extends JFrame {
     public void youLost(){
         messageBox.append("GAME OVER, YOU LOST" + '\n');
     }
+
 
 }

@@ -181,6 +181,7 @@ public class BattleshipGrid extends JPanel {
                                 if (!gridSpaces[i][j].isDone) {
                                     gridSpaces[i][j].setBackground(Color.BLACK);
                                     gridSpaces[i][j].setClicked(false);
+                                    gridSpaces[i][j].setIcon(new ImageIcon("pics/wave.jpg"));
                                 }
                             }
                         }
@@ -200,6 +201,7 @@ public class BattleshipGrid extends JPanel {
                                         if (!gridSpaces[i][j].isDone) {
                                             gridSpaces[i][j].setBackground(Color.BLUE);
                                             gridSpaces[i][j].setClicked(true);
+                                            gridSpaces[i][j].setIcon(new ImageIcon("pics/target.PNG"));
                                         }
                                     }
                                 }
@@ -577,6 +579,7 @@ public class BattleshipGrid extends JPanel {
 
         public CellPane(int r, int c) {
 
+            setIcon(new ImageIcon("pics/wave.jpg"));
             setOpaque(true);
             setForeground(defaultBackground);
             setMinimumSize(new Dimension(50, 50));
@@ -673,8 +676,10 @@ public class BattleshipGrid extends JPanel {
     }
 
     public boolean markShot(int row, int col){
+        //mark shot on your board
 
         if(gridSpaces[row][col].getIsShipHere() == true){
+            SocketSignals.playSound("sounds/missile_launch.wav");
             System.out.print("Your ship has been hit!");
             gridSpaces[row][col].setIcon(null);
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
@@ -682,8 +687,10 @@ public class BattleshipGrid extends JPanel {
             gridSpaces[row][col].setIsDone(true);
             return true;
         }else{
+            SocketSignals.playSound("sounds/splash.wav");
             System.out.print("The enemy has missed!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+            gridSpaces[row][col].setIcon(new ImageIcon("pics/x.jpg"));
             gridSpaces[row][col].setIsDone(true);
             return false;
         }
@@ -692,15 +699,19 @@ public class BattleshipGrid extends JPanel {
     }
 
     public void markShot(int row, int col, boolean hit){
+        //mark shot on opponents board
 
         if(hit == true){
+            SocketSignals.playSound("sounds/missile_launch.wav");
 //            System.out.print("You hit a ship!");
             gridSpaces[row][col].setIcon(null);
             gridSpaces[row][col].setIcon(new ImageIcon("pics/giphy.gif"));
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
         }else{
+            SocketSignals.playSound("sounds/splash.wav");
             System.out.print("You missed!!");
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
+            gridSpaces[row][col].setIcon(new ImageIcon("pics/x.jpg"));
         }
         gridSpaces[row][col].setIsDone(true);
 
