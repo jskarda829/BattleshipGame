@@ -23,6 +23,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
     int bottomBound = 500;
     int boardHeight = 10;
     int boardWidth = 10;
+    public boolean isClickable = true;
 
     Carrier carrier;
     Battleship battleship;
@@ -58,20 +59,19 @@ public class ShipMovingAdaptor extends MouseAdapter{
     }
 
     public void mouseClicked(MouseEvent e){
+        if(isClickable) {
+            if (SwingUtilities.isRightMouseButton(e)) {
+                setBounds();
+                setShipsGone();
 
-        if(SwingUtilities.isRightMouseButton(e)){
-            print("dongus");
-            setBounds();
-            setShipsGone();
-
-            //check if there are offsets that need to be applied
-            if(leftShipsGone && rightShipsGone){
-                xOffset = 50;
-            }else if(leftShipsGone && !rightShipsGone){
-                xOffset = 25;
-            }else if(rightShipsGone && !leftShipsGone){
-                xOffset = 25;
-            }
+                //check if there are offsets that need to be applied
+                if (leftShipsGone && rightShipsGone) {
+                    xOffset = 50;
+                } else if (leftShipsGone && !rightShipsGone) {
+                    xOffset = 25;
+                } else if (rightShipsGone && !leftShipsGone) {
+                    xOffset = 25;
+                }
 
 //        print("e.getX(): " + e.getX());
 //        print("e.getY(): " + e.getY());
@@ -79,15 +79,16 @@ public class ShipMovingAdaptor extends MouseAdapter{
 //        System.out.println("gridSpaces[9][9].getX() + xOffset: " + (gridSpaces[9][9].getX() + xOffset));
 //        System.out.println(xOffset);
 
-            if (e.getX() <= gridSpaces[9][9].getX() + 50 + xOffset && e.getY() <= 500) {
-                System.out.println("This is true: (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500)");
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 10; j++) {
-                        if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50 + xOffset) {
-                            if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
-                                if (gridSpaces[i][j].getIsShipHere()) {
-                                    System.out.println("Calling rotate ship");
-                                    rotateShip(e);
+                if (e.getX() <= gridSpaces[9][9].getX() + 50 + xOffset && e.getY() <= 500) {
+                    System.out.println("This is true: (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500)");
+                    for (int i = 0; i < 10; i++) {
+                        for (int j = 0; j < 10; j++) {
+                            if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50 + xOffset) {
+                                if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
+                                    if (gridSpaces[i][j].getIsShipHere()) {
+                                        System.out.println("Calling rotate ship");
+                                        rotateShip(e);
+                                    }
                                 }
                             }
                         }
@@ -95,8 +96,6 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 }
             }
         }
-
-
     }
 
     public void rotateShip(MouseEvent e){
@@ -145,37 +144,40 @@ public class ShipMovingAdaptor extends MouseAdapter{
 //        print("e.getX(): " + e.getX());
 //        print("e.getY(): " + e.getY());
 
-        if(SwingUtilities.isLeftMouseButton(e)) {
+        if(isClickable) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
 
             printBoard(1);
 
-            setBounds();
-            setShipsGone();
+                setBounds();
+                setShipsGone();
 
-            //check if there are offsets that need to be applied
-            if (leftShipsGone && rightShipsGone) {
-                xOffset = 50;
-            } else if (leftShipsGone && !rightShipsGone) {
-                xOffset = 25;
-            } else if (rightShipsGone && !leftShipsGone) {
-                xOffset = 25;
-            }
+                //check if there are offsets that need to be applied
+                if (leftShipsGone && rightShipsGone) {
+                    xOffset = 50;
+                } else if (leftShipsGone && !rightShipsGone) {
+                    xOffset = 25;
+                } else if (rightShipsGone && !leftShipsGone) {
+                    xOffset = 25;
+                }
 
 
-            if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
-                colClicked = (int) ((e.getX() - xOffset) / 50);
-                rowClicked = (int) ((e.getY()) / 50);
-                //System.out.println(TAG + " row: " + rowClicked);
-                //System.out.println(TAG + " col: " + colClicked);
+                if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
+                    colClicked = (int) ((e.getX() - xOffset) / 50);
+                    rowClicked = (int) ((e.getY()) / 50);
+                    //System.out.println(TAG + " row: " + rowClicked);
+                    //System.out.println(TAG + " col: " + colClicked);
 
-                whichShipWasClicked = getShipThere();
+                    whichShipWasClicked = getShipThere();
 //            print("whichShipWasClicked: " + whichShipWasClicked);
+
                 clickedShipVertical = getVertical();
             print("mouse pressed() clickedShipVertical: " + clickedShipVertical);
 
+
+                }
             }
         }
-
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -183,61 +185,61 @@ public class ShipMovingAdaptor extends MouseAdapter{
          *  - get the row and col that the mouse was released on
          *  - check if the clicked ship can be dropped here
          */
+        if(isClickable) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
 
-        if(SwingUtilities.isLeftMouseButton(e)) {
-
-            if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
-                colReleased = (int) ((e.getX() - xOffset) / 50);
-                rowReleased = (int) ((e.getY()) / 50);
-                //System.out.println(TAG + " row: " + rowReleased);
-                //System.out.println(TAG + " col: " + colReleased);
+                if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
+                    colReleased = (int) ((e.getX() - xOffset) / 50);
+                    rowReleased = (int) ((e.getY()) / 50);
+                    //System.out.println(TAG + " row: " + rowReleased);
+                    //System.out.println(TAG + " col: " + colReleased);
 //            print("e.getX(): " + e.getX());
 //            print("e.getY(): " + e.getY());
 
-                if (whichShipWasClicked == SocketSignals.CARRIER_INT) {
+                    if (whichShipWasClicked == SocketSignals.CARRIER_INT) {
 
-                    if (canDrop(rowReleased, colReleased, carrierHeight)) {
-                        deleteOldShip(carrierHeight);
-                        dropCarrier(rowReleased, colReleased);
+                        if (canDrop(rowReleased, colReleased, carrierHeight)) {
+                            deleteOldShip(carrierHeight);
+                            dropCarrier(rowReleased, colReleased);
 
-                    }
+                        }
 
-                } else if (whichShipWasClicked == SocketSignals.BATTLESHIP_INT) {
+                    } else if (whichShipWasClicked == SocketSignals.BATTLESHIP_INT) {
 
 //                print("Clicked battleship");
 
-                    if (canDrop(rowReleased, colReleased, battleshipHeight)) {
+                        if (canDrop(rowReleased, colReleased, battleshipHeight)) {
 //                    print("Can drop the battleship");
-                        deleteOldShip(battleshipHeight);
-                        dropBattleship(rowReleased, colReleased);
-                    }
+                            deleteOldShip(battleshipHeight);
+                            dropBattleship(rowReleased, colReleased);
+                        }
 
-                } else if (whichShipWasClicked == SocketSignals.DESTROYER_INT) {
+                    } else if (whichShipWasClicked == SocketSignals.DESTROYER_INT) {
 
-                    if (canDrop(rowReleased, colReleased, destroyerHeight)) {
-                        deleteOldShip(destroyerHeight);
-                        dropDestroyer(rowReleased, colReleased);
-                    }
+                        if (canDrop(rowReleased, colReleased, destroyerHeight)) {
+                            deleteOldShip(destroyerHeight);
+                            dropDestroyer(rowReleased, colReleased);
+                        }
 
-                } else if (whichShipWasClicked == SocketSignals.SUBMARINE_INT) {
+                    } else if (whichShipWasClicked == SocketSignals.SUBMARINE_INT) {
 
-                    if (canDrop(rowReleased, colReleased, subHeight)) {
-                        deleteOldShip(subHeight);
-                        dropSub(rowReleased, colReleased);
-                    }
+                        if (canDrop(rowReleased, colReleased, subHeight)) {
+                            deleteOldShip(subHeight);
+                            dropSub(rowReleased, colReleased);
+                        }
 
-                } else if (whichShipWasClicked == SocketSignals.PATROL_BOAT_INT) {
+                    } else if (whichShipWasClicked == SocketSignals.PATROL_BOAT_INT) {
 
-                    if (canDrop(rowReleased, colReleased, patrolBoatHeight)) {
-                        deleteOldShip(patrolBoatHeight);
-                        dropPatrolBoat(rowReleased, colReleased);
+                        if (canDrop(rowReleased, colReleased, patrolBoatHeight)) {
+                            deleteOldShip(patrolBoatHeight);
+                            dropPatrolBoat(rowReleased, colReleased);
+                        }
+
                     }
 
                 }
-
             }
         }
-
 
     }
 
