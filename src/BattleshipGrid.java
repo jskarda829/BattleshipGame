@@ -139,17 +139,199 @@ public class BattleshipGrid extends JPanel {
             addMouseListener(new MouseAdapter() {
 
                 public void mouseClicked(MouseEvent e) {
+                    if(!needToAddShips) {
+                        changeSpaceSelection(e);
+                    } else {
+                        System.out.println("Checking for ship");
+                        if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+                            for (int i = 0; i < 10; i++) {
+                                for (int j = 0; j < 10; j++) {
+                                    if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50) {
+                                        if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
+                                            if (gridSpaces[i][j].isShipHere) {
+                                                //TODO ADD SHIP ROTATION LOL
+                                                System.out.println("Calling rotate ship");
+                                                rotateShip(i, j);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            repaint();
+                        }
+                    }
+                }
+
+                public void rotateShip(int row, int col){
+//                    if(gridSpaces[row][col].whichShip == SocketSignals.CARRIER_INT){
+                    if(1 == SocketSignals.CARRIER_INT){
+//                        int shipPiece = gridSpaces[row][col].shipPiece;
+//                        boolean isVertical = gridSpaces[row][col].isShipVertical;
+                        int shipPiece = 3;
+                        boolean isVertical = true;
+                        boolean canIRotateThisShip = true;
+                        while(shipPiece > 1){
+                            System.out.println("Inside while(shipPiece > 1");
+                            if(isVertical){
+                                row--;
+                                shipPiece--;
+                            } else {
+                                col--;
+                                shipPiece--;
+                            }
+                        }
+                        if(isVertical) {
+                            System.out.println("Inside if(isVertical)");
+                            if(col + 4 > 9){
+                                System.out.println("Setting can i rotate to false in if(col + 4 > 9)");
+                                canIRotateThisShip = false;
+                            }
+                            for (int i = col + 1; i < col + 5; i++) {
+                                if (gridSpaces[row][col].isShipHere){
+                                    System.out.println("Setting can i rotate to false in if (gridSpaces[row][col].isShipHere){");
+                                    //canIRotateThisShip = false;
+                                }
+                            }
+                        } else {
+                            if(row + 4 > 9){
+                                canIRotateThisShip = false;
+                            }
+                            for(int i = row; i < row + 5; i++){
+                                if (gridSpaces[row][col].isShipHere){
+                                    canIRotateThisShip = false;
+                                }
+                            }
+                        }
+                        if(canIRotateThisShip && isVertical){
+                            System.out.println("Inside if(canIRotateThisShip && isVertical)");
+                            for(int i = col + 1; i < col + 5; i++){
+                                gridSpaces[row][col].setIcon(null);
+                                gridSpaces[row][col].setBackground(Color.BLACK);
+                                gridSpaces[row][col].setIsShipHere(false);
+                            }
+                            int space = 2;
+                            for(int i = row + 1; i < row + 5; i++){
+                                System.out.println("Inside for(int i = row + 1; i < row + 5; i++){");
+                                switch(space){
+                                    case 2:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_2"));
+                                        break;
+                                    case 3:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_3"));
+                                        break;
+                                    case 4:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_4"));
+                                        break;
+                                    case 5:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_5"));
+                                        break;
+                                }
+                                space++;
+                            }
+                        } else if(canIRotateThisShip && !isVertical){
+                            for(int i = row + 1; i < row + 5; i++){
+                                gridSpaces[row][col].setIcon(null);
+                                gridSpaces[row][col].setBackground(Color.BLACK);
+                                gridSpaces[row][col].setIsShipHere(false);
+                            }
+                            int space = 2;
+                            for(int i = col + 1; i < col + 5; i++){
+                                switch(space){
+                                    case 2:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_2"));
+                                        break;
+                                    case 3:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_3"));
+                                        break;
+                                    case 4:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_4"));
+                                        break;
+                                    case 5:
+                                        gridSpaces[row][col].setIcon(new ImageIcon("pics/carrier_5"));
+                                        break;
+                                }
+                                space++;
+                            }
+                        }
+                    } else if(gridSpaces[row][col].whichShip == SocketSignals.BATTLESHIP_INT){
+                        int shipPiece = gridSpaces[row][col].shipPiece;
+                        boolean isVertical = gridSpaces[row][col].isShipVertical;
+                        while(shipPiece > 1){
+                            if(isVertical){
+                                row--;
+                                shipPiece--;
+                            } else {
+                                col--;
+                                shipPiece--;
+                            }
+                        }
+                    }else if(gridSpaces[row][col].whichShip == SocketSignals.DESTROYER_INT){
+                        int shipPiece = gridSpaces[row][col].shipPiece;
+                        boolean isVertical = gridSpaces[row][col].isShipVertical;
+                        while(shipPiece > 1){
+                            if(isVertical){
+                                row--;
+                                shipPiece--;
+                            } else {
+                                col--;
+                                shipPiece--;
+                            }
+                        }
+                    }else if(gridSpaces[row][col].whichShip == SocketSignals.SUBMARINE_INT){
+                        int shipPiece = gridSpaces[row][col].shipPiece;
+                        boolean isVertical = gridSpaces[row][col].isShipVertical;
+                        while(shipPiece > 1){
+                            if(isVertical){
+                                row--;
+                                shipPiece--;
+                            } else {
+                                col--;
+                                shipPiece--;
+                            }
+                        }
+                    }else if(gridSpaces[row][col].whichShip == SocketSignals.PATROL_BOAT_INT){
+                        int shipPiece = gridSpaces[row][col].shipPiece;
+                        boolean isVertical = gridSpaces[row][col].isShipVertical;
+                        while(shipPiece > 1){
+                            if(isVertical){
+                                row--;
+                                shipPiece--;
+                            } else {
+                                col--;
+                                shipPiece--;
+                            }
+                        }
+                    }
+                    repaint();
+                }
+
+                public void changeSpaceSelection(MouseEvent e){
+                    setGridSpacesToDefault(e);
+                    setClickedSpaceColor(e);
+                }
+
+                /**
+                 * Used in changeSpaceSelection() above
+                 * @param e
+                 */
+                private void setGridSpacesToDefault(MouseEvent e){
                     for (int i = 0; i < 10; i++) {
                         for (int j = 0; j < 10; j++) {
                             if (gridSpaces[i][j].getIsClicked()) {
                                 if (!gridSpaces[i][j].isDone) {
                                     gridSpaces[i][j].setBackground(Color.BLACK);
                                     gridSpaces[i][j].setClicked(false);
-//                                    System.out.println(gridSpaces[i][j].getX() + " " + gridSpaces[i][j].getY());
                                 }
                             }
                         }
                     }
+                }
+
+                /**
+                 * Used in changeSpaceSelection() above
+                 * @param e
+                 */
+                private void setClickedSpaceColor(MouseEvent e){
                     if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < 10; j++) {
@@ -168,7 +350,8 @@ public class BattleshipGrid extends JPanel {
                 }
 
                 public void mouseEntered(MouseEvent e) {
-                    if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
+
+                    if (!needToAddShips) {
                         setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
                     } else {
                         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -259,6 +442,9 @@ public class BattleshipGrid extends JPanel {
         private int column;
         private int whichShip; //1 - 5 carrier, battleship, destroyer, sub, patrol boat
         private int shipPiece; //1 top of ship
+        private boolean isShipVertical = true;
+
+
 
         public CellPane(int r, int c) {
 
