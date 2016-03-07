@@ -21,8 +21,6 @@ public class ServerWriteRunnable implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Server write thread running...");
-
         String message;
         BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
 

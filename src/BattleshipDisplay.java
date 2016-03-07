@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFrame;
+import javax.swing.text.DefaultCaret;
 
 /**
  * Created by jskarda on 2/16/16.
@@ -107,6 +108,8 @@ public class BattleshipDisplay extends JFrame {
         sendButton = new JButton("Send");
         enterText = new JTextField("Enter message");
         messageBox = new JTextArea();
+        DefaultCaret caret = (DefaultCaret)messageBox.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         //Set behavior of the messagebox/scrollpane
         messageBox.setEditable(false);
         messageBox.setAutoscrolls(true);
@@ -138,7 +141,6 @@ public class BattleshipDisplay extends JFrame {
                             server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text, null);
                             messageBox.append("Player 1: " + text + '\n');
                         }
-                        //messageBox.append(text + '\n');
                         enterText.setText("");
                     }
                 }
@@ -162,7 +164,6 @@ public class BattleshipDisplay extends JFrame {
                         server.send(SocketSignals.BATTLESHIP_SIGNAL_CHAT, text, null);
                         messageBox.append("Player 1: " + text + '\n');
                     }
-                    //messageBox.append(text + '\n');
                     enterText.setText("");
                 }
             }
@@ -187,7 +188,7 @@ public class BattleshipDisplay extends JFrame {
                     bfgBottom.removeAllListeners();
                 } else {
                     assignRandomShipsButton.setVisible(false);
-                    shipsAreReadyButton.setVisible(false);
+                    //shipsAreReadyButton.setVisible(false);
                     bfgBottom.removeAllListeners();
                 }
             }
@@ -215,19 +216,10 @@ public class BattleshipDisplay extends JFrame {
         fireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-//                System.out.println("Taking a shot!");
                 //get the row and col of the clicked targeted cell to send to other player
                 BattleshipGrid.CellPane temp = null;
-
                 temp = bfgTop.getTargetedCell();
-
                 if(temp != null){
-                    //send the targeted coordinates
-
-
-
                     if(isClient){
                         client.send(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING, null, temp);
                     }else{
@@ -243,7 +235,6 @@ public class BattleshipDisplay extends JFrame {
             }
         });
         fireButton.setBounds(634, 500, 100, 100);
-        //fireButton.setVisible(false);
 
         //add stuff to board
         add(bfgBottom);
@@ -275,13 +266,10 @@ public class BattleshipDisplay extends JFrame {
     }//close loadBoard()
 
     private void setRandomShips(){
-//        print("Assigning random ships");
         boolean shipsAssigned = false;
 
         shipsAssigned = bfgBottom.assignRandomShips();
-
         messageBox.append("**_Your Ships are set_**\n");
-
         if(shipsAssigned == true){
             //send ships ready signal
             if(isClient){
@@ -298,13 +286,10 @@ public class BattleshipDisplay extends JFrame {
     }
 
     public void shipsAreSet(){
-            //send ships ready signal
         if(isClient){
-//               print("setRandomShips() ships assigned is true, isClient is trur");
             client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
             clientShips = true;
         } else {
-//               print("setRandomShips() ships assigned is true, isClient is false");
             serverShips = true;
             server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
             startGameIfReady();
@@ -337,8 +322,6 @@ public class BattleshipDisplay extends JFrame {
             gameReadyToStart = true;
             startTurn();
         }else {
-//            System.out.println("Not Ready to start game");
-
 
         }
     }
@@ -435,43 +418,6 @@ public class BattleshipDisplay extends JFrame {
         }else{
             server.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
         }
-
-
-    /*
-        if(isClient){
-            client.send(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS, null, null);
-            print("sending check ships signal");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(isGameOver){
-                print("Game over signal being sent");
-                client.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
-            } else {
-                print("your turn signal being sent");
-                client.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
-            }
-        } else {
-            server.send(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS, null, null);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(isGameOver){
-                print("Game over signal being sent");
-                server.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
-            } else {
-                print("your turn signal being sent");
-                server.send(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN, null, null);
-            }
-
-        }
-
-     */
-
     }
 
     public void markOpponentsShot(int row, int col){
@@ -511,15 +457,8 @@ public class BattleshipDisplay extends JFrame {
 
 
     public static void main(String[] args) {
-
-//        SwingUtilities.invokeLater(new Runnable() {
-//
-//            @Override
-//            public void run() {
-                BattleshipDisplay ex = new BattleshipDisplay();
-                ex.setVisible(true);
-//            }
-//        });
+        BattleshipDisplay ex = new BattleshipDisplay();
+        ex.setVisible(true);
     }
 
 
@@ -542,16 +481,13 @@ public class BattleshipDisplay extends JFrame {
     }
 
     public void setBoardAfterGameOver(){
-        messageBox.append("GAME OVER NIGRO");
     }
 
     public void setGameOver(boolean b){
-        messageBox.append("SETTING GAME OVER" + '\n');
         isGameOver = b;
     }
 
     public boolean checkGameOver(){
-        messageBox.append("CHECKING GAME OVER" + '\n');
         boolean b = bfgBottom.isGameOver();
         if(b){
             setBoardAfterGameOver();

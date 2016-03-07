@@ -13,12 +13,9 @@ public class ShipMouseAdapter extends MouseAdapter {
     int releasedRow;
     int releasedCol;
     int boardHeight = 10;
-    int boardWidth = 10;
 
     int xOffset = 0;
     int yOffset = 0;
-    int calculatedX;
-    int calculatedY;
     int topBound, bottomBound, leftBound, rightBound;
 
     int carrierHeight = 5;
@@ -41,8 +38,6 @@ public class ShipMouseAdapter extends MouseAdapter {
     Submarine submarine;
     PatrolBoat patrolBoat;
 
-    boolean didMoveOver = false;
-
     BattleshipGrid battleshipGrid;
 
 
@@ -62,11 +57,9 @@ public class ShipMouseAdapter extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
 
         shipBeingDragged = true;
-        System.out.println("ShipMouseAdapter mousePressed, Ship being dragged: " + shipBeingDragged);
 
         JComponent c = (JComponent) e.getSource();
         nameOfShipClicked = c.getName();
-        System.out.println("ShipMouseAdapter: ship clicked: " + nameOfShipClicked);
 
         setOffsets(nameOfShipClicked);
         setBounds(nameOfShipClicked);
@@ -74,19 +67,11 @@ public class ShipMouseAdapter extends MouseAdapter {
     }
 
     public void mouseReleased(MouseEvent e) {
-        //super.mouseReleased(e);
-        System.out.println("ShipMouseAdapter mouseReleased, Ship being dragged: " + shipBeingDragged);
         shipBeingDragged = false;
-        System.out.println("ShipMouseAdapter mouseReleased, Ship being dragged: " + shipBeingDragged);
-
-        System.out.println("e.getX: "  + e.getX() + " e.getY: " + e.getY());
-
 
         if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
             releasedCol = 9 - (int)((Math.abs(e.getX()) - xOffset) / 50);
             releasedRow = (int)((e.getY() + yOffset) / 50);
-            System.out.println("row: " + releasedRow);
-            System.out.println("col: " + releasedCol);
 
             if(nameOfShipClicked.equals(NameCarrier)) {
 
@@ -127,15 +112,10 @@ public class ShipMouseAdapter extends MouseAdapter {
     //helper functions
 
     private boolean canDrop(int releasedRow, int releasedCol, int shipHight){
-
-        print("canDrop top");
-
         //check for height out of bounds problems
         if(releasedRow <= (boardHeight - shipHight)){
             //can drop
-
         }else{
-            System.out.println("Cannot drop");
             return false;
         }
 
