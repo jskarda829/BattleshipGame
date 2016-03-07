@@ -99,6 +99,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
     }
 
     public void rotateShip(MouseEvent e){
+        printBoard(1);
         if (e.getX() >= leftBound && e.getX() <= rightBound && e.getY() <= bottomBound && e.getY() >= topBound) {
             colClicked = (int)((e.getX() - xOffset) / 50);
             rowClicked = (int)((e.getY()) / 50);
@@ -108,7 +109,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
             whichShipWasClicked = getShipThere();
             //print("whichShipWasClicked: " + whichShipWasClicked);
             clickedShipVertical = gridSpaces[rowClicked][colClicked].getIsVertical();
-//            print("clickedShipVertical: " + clickedShipVertical);
+            print("clickedShipVertical: " + clickedShipVertical);
 //            print("ship clicked " + gridSpaces[rowClicked][colClicked].getShipPiece());
         }
 
@@ -146,6 +147,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
         if(isClickable) {
             if (SwingUtilities.isLeftMouseButton(e)) {
 
+                printBoard(1);
 
                 setBounds();
                 setShipsGone();
@@ -169,7 +171,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
                     whichShipWasClicked = getShipThere();
 //            print("whichShipWasClicked: " + whichShipWasClicked);
                     clickedShipVertical = getVertical();
-//            print("clickedShipVertical: " + clickedShipVertical);
+                    print("mouse pressed() clickedShipVertical: " + clickedShipVertical);
 
                 }
             }
@@ -236,6 +238,8 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 }
             }
         }
+
+
     }
 
 
@@ -295,16 +299,34 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 }
             }
 
-            return true;
-
         }else{
+            print("ship is sideways in canDrop()");
             //ship is sideways
             //TODO
+            //check for height out of bounds problems
+            if(releasedCol <= (boardWidth - shipHight)){
+                //can drop
+
+            }else{
+//                System.out.println("Cannot drop");
+                return false;
+            }
+
+            //check for ship overlap problems
+            for(int i = releasedCol; i < (releasedCol + shipHight); i++){
+                if((gridSpaces[releasedRow][i].getIsShipHere()) && (!isSameShip(whichShipWasClicked,gridSpaces[releasedRow][i]))){
+                    //there is a ship here and cannot place new ship here
+//                    print("another ship there, cannot move ship");
+                    return false;
+                }else{
+//                    print("not another ship there, its ok to drop there");
+                }
+            }
         }
 
-//        print("At the end of can drop, it is false");
+       print("At the end of can drop, it is true");
 
-        return false;
+        return true;
 
     }
 
@@ -476,6 +498,8 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 gridSpaces[row][col + i].clearCell();
             }
         }
+
+        carrier.toogleVertical();
     }
 
     private void rotateBattleship(){
@@ -553,6 +577,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 gridSpaces[row][col + i].clearCell();
             }
         }
+        battleship.toogleVertical();
     }
 
     private void rotateDestroyer(){
@@ -620,6 +645,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 gridSpaces[row][col + i].clearCell();
             }
         }
+        destroyer.toogleVertical();
     }
 
     private void rotateSubmarine(){
@@ -687,6 +713,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 gridSpaces[row][col + i].clearCell();
             }
         }
+        submarine.toogleVertical();
     }
 
     private void rotatePatrolBoat(){
@@ -744,134 +771,316 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 gridSpaces[row][col + i].clearCell();
             }
         }
+        patrolBoat.toogleVertical();
     }
 
     private void dropCarrier(int releasedRow, int releasedCol){
 
-        //set the images
-        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/carrier_1.png"));
-        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/carrier_2.png"));
-        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/carrier_3.png"));
-        gridSpaces[releasedRow + 3][releasedCol].setIcon(new ImageIcon("pics/carrier_4.png"));
-        gridSpaces[releasedRow + 4][releasedCol].setIcon(new ImageIcon("pics/carrier_5.png"));
+        if(clickedShipVertical == true) {
+            print("dropCarrier: clickedShip: " + clickedShipVertical );
 
-        //set the shipIsHere logic
-        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 4][releasedCol].setIsShipHere(true);
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/carrier_1.png"));
+            gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/carrier_2.png"));
+            gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/carrier_3.png"));
+            gridSpaces[releasedRow + 3][releasedCol].setIcon(new ImageIcon("pics/carrier_4.png"));
+            gridSpaces[releasedRow + 4][releasedCol].setIcon(new ImageIcon("pics/carrier_5.png"));
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
-        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
-        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
-        gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
-        gridSpaces[releasedRow + 4][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 4][releasedCol].setIsShipHere(true);
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
-        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
-        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
-        gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
-        gridSpaces[releasedRow + 4][releasedCol].setShipPiece(SocketSignals.FIFTH_PIECE);
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow + 4][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+            gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
+            gridSpaces[releasedRow + 4][releasedCol].setShipPiece(SocketSignals.FIFTH_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 3][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 4][releasedCol].setIsVertical(true);
+
+        }else{
+            print("dropCarrier: clickedShip: " + clickedShipVertical );
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/carrier_1 copy.png"));
+            gridSpaces[releasedRow ][releasedCol + 1].setIcon(new ImageIcon("pics/carrier_2 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 2].setIcon(new ImageIcon("pics/carrier_3 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 3].setIcon(new ImageIcon("pics/carrier_4 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 4].setIcon(new ImageIcon("pics/carrier_5 copy.png"));
+
+
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 1].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 2].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 3].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 4].setIsShipHere(true);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow][releasedCol + 1].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow][releasedCol + 2].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow][releasedCol + 3].setWhichShip(SocketSignals.CARRIER_INT);
+            gridSpaces[releasedRow][releasedCol + 4].setWhichShip(SocketSignals.CARRIER_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow][releasedCol + 1].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow][releasedCol + 2].setShipPiece(SocketSignals.THIRD_PIECE);
+            gridSpaces[releasedRow][releasedCol + 3].setShipPiece(SocketSignals.FOURTH_PIECE);
+            gridSpaces[releasedRow][releasedCol + 4].setShipPiece(SocketSignals.FIFTH_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow + 1][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow + 2][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow + 3][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow + 4][releasedCol].setIsVertical(false);
+        }
 
     }
 
     private void dropBattleship(int releasedRow, int releasedCol){
 
-        //set the images
-        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/battleship_1.png"));
-        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/battleship_2.png"));
-        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/battleship_3.png"));
-        gridSpaces[releasedRow + 3][releasedCol].setIcon(new ImageIcon("pics/battleship_4.png"));
+        if(clickedShipVertical == true) {
 
-        //set the shipIsHere logic
-        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/battleship_1.png"));
+            gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/battleship_2.png"));
+            gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/battleship_3.png"));
+            gridSpaces[releasedRow + 3][releasedCol].setIcon(new ImageIcon("pics/battleship_4.png"));
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
-        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
-        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
-        gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 3][releasedCol].setIsShipHere(true);
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
-        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
-        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
-        gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            gridSpaces[releasedRow + 3][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
 
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+            gridSpaces[releasedRow + 3][releasedCol].setShipPiece(SocketSignals.FOURTH_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 3][releasedCol].setIsVertical(true);
+
+        }else{
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/battleship_1 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 1].setIcon(new ImageIcon("pics/battleship_2 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 2].setIcon(new ImageIcon("pics/battleship_3 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 3].setIcon(new ImageIcon("pics/battleship_4 copy.png"));
+
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 1].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 2].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 3].setIsShipHere(true);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            gridSpaces[releasedRow][releasedCol + 1].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            gridSpaces[releasedRow][releasedCol + 2].setWhichShip(SocketSignals.BATTLESHIP_INT);
+            gridSpaces[releasedRow][releasedCol + 3].setWhichShip(SocketSignals.BATTLESHIP_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow][releasedCol + 1].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow][releasedCol + 2].setShipPiece(SocketSignals.THIRD_PIECE);
+            gridSpaces[releasedRow][releasedCol + 3].setShipPiece(SocketSignals.FOURTH_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 1].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 2].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 3].setIsVertical(false);
+        }
 
     }
 
     private void dropDestroyer(int releasedRow, int releasedCol){
 
-        //set the images
-        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/destroyer_1.png"));
-        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/destroyer_2.png"));
-        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/destroyer_3.png"));
+        if(clickedShipVertical == true) {
 
-        //set the shipIsHere logic
-        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/destroyer_1.png"));
+            gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/destroyer_2.png"));
+            gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/destroyer_3.png"));
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
-        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
-        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
-        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
-        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+            gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+            gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsVertical(true);
+        }else{
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/destroyer_1 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 1].setIcon(new ImageIcon("pics/destroyer_2 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 2].setIcon(new ImageIcon("pics/destroyer_3 copy.png"));
+
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 1].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 2].setIsShipHere(true);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.DESTROYER_INT);
+            gridSpaces[releasedRow][releasedCol + 1].setWhichShip(SocketSignals.DESTROYER_INT);
+            gridSpaces[releasedRow][releasedCol + 2].setWhichShip(SocketSignals.DESTROYER_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow][releasedCol + 1].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow][releasedCol + 2].setShipPiece(SocketSignals.THIRD_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 1].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 2].setIsVertical(false);
+        }
 
     }
 
     private void dropSub(int releasedRow, int releasedCol){
 
-        //set the images
-        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/sub_1.png"));
-        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/sub_2.png"));
-        gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/sub_3.png"));
+        if(clickedShipVertical) {
 
-        //set the shipIsHere logic
-        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/sub_1.png"));
+            gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/sub_2.png"));
+            gridSpaces[releasedRow + 2][releasedCol].setIcon(new ImageIcon("pics/sub_3.png"));
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
-        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
-        gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsShipHere(true);
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
-        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
-        gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+            gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+            gridSpaces[releasedRow + 2][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow + 2][releasedCol].setShipPiece(SocketSignals.THIRD_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 2][releasedCol].setIsVertical(true);
+        }else{
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/sub_1 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 1].setIcon(new ImageIcon("pics/sub_2 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 2].setIcon(new ImageIcon("pics/sub_3 copy.png"));
+
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 1][releasedCol + 1].setIsShipHere(true);
+            gridSpaces[releasedRow + 2][releasedCol + 2].setIsShipHere(true);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.SUBMARINE_INT);
+            gridSpaces[releasedRow][releasedCol + 1].setWhichShip(SocketSignals.SUBMARINE_INT);
+            gridSpaces[releasedRow][releasedCol + 2].setWhichShip(SocketSignals.SUBMARINE_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow][releasedCol + 1].setShipPiece(SocketSignals.SECOND_PIECE);
+            gridSpaces[releasedRow][releasedCol + 2].setShipPiece(SocketSignals.THIRD_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 1].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 2].setIsVertical(false);
+        }
 
     }
 
     private void dropPatrolBoat(int releasedRow, int releasedCol){
 
-        //set the images
-        gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_1.png"));
-        gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_2.png"));
+        if(clickedShipVertical) {
 
-        //set the shipIsHere logic
-        gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
-        gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_1.png"));
+            gridSpaces[releasedRow + 1][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_2.png"));
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
-        gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsShipHere(true);
 
-        //set the which ship logic
-        gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
-        gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+            gridSpaces[releasedRow + 1][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow + 1][releasedCol].setShipPiece(SocketSignals.SECOND_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(true);
+            gridSpaces[releasedRow + 1][releasedCol].setIsVertical(true);
+        }else{
+            //set the images
+            gridSpaces[releasedRow][releasedCol].setIcon(new ImageIcon("pics/patrol_boat_1 copy.png"));
+            gridSpaces[releasedRow][releasedCol + 1].setIcon(new ImageIcon("pics/patrol_boat_2 copy.png"));
+
+            //set the shipIsHere logic
+            gridSpaces[releasedRow][releasedCol].setIsShipHere(true);
+            gridSpaces[releasedRow][releasedCol + 1].setIsShipHere(true);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+            gridSpaces[releasedRow][releasedCol + 1].setWhichShip(SocketSignals.PATROL_BOAT_INT);
+
+            //set the which ship logic
+            gridSpaces[releasedRow][releasedCol].setShipPiece(SocketSignals.FIRST_PIECE);
+            gridSpaces[releasedRow][releasedCol + 1].setShipPiece(SocketSignals.SECOND_PIECE);
+
+            //set the vertical logic
+            gridSpaces[releasedRow][releasedCol].setIsVertical(false);
+            gridSpaces[releasedRow][releasedCol + 1].setIsVertical(false);
+        }
 
     }
 
@@ -935,6 +1144,24 @@ public class ShipMovingAdaptor extends MouseAdapter{
             leftBound = 25;
             rightBound = 525;
         }
+    }
+
+    private void printBoard(int sig){
+
+        if(sig == 1){
+            //print vertical
+            for(int i = 0; i < 10; i++){
+                for(int j = 0; j < 10; j++){
+                    if(gridSpaces[i][j].getIsVertical()){
+                        System.out.print(" V");
+                    }else{
+                        System.out.print(" S");
+                    }
+                }
+                print("");
+            }
+        }
+
     }
 
 

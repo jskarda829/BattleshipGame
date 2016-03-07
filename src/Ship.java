@@ -17,4 +17,8 @@ public abstract class Ship extends JLabel {
     private void setVertical(boolean b){
         isVerical = b;
     }
+
+    protected void toogleVertical(){
+        isVerical = !isVerical;
+    }
 }
