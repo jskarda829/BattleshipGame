@@ -16,6 +16,11 @@ public class SocketSignals {
     public static final String BATTLESHIP_SIGNAL_TARGET_MISSED= "SIG-10006";
     public static final String BATTLESHIP_SIGNAL_CHECK_SHIPS = "SIG-10007";
     public static final String BATTLESHIP_SIGNAL_GAME_OVER = "SIG-10008";
+    public static final String CARRIER_SUNK_SIGNAL = "SIG-10009";
+    public static final String BATTLESHIP_SUNK_SIGNAL = "SIG-10010";
+    public static final String DESTROYER_SUNK_SIGNAL = "SIG-10011";
+    public static final String SUBMARINE_SUNK_SIGNAL = "SIG-10012";
+    public static final String PATROL_BOAT_SUNK_SIGNAL = "SIG-10013";
 
     public static final Color BATTLESHIP_COLOR_SHIP_HIT = Color.red;
     public static final Color BATTLESHIP_COLOR_SHIP_MISS = Color.gray;

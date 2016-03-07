@@ -30,7 +30,13 @@ public class BattleshipDisplay extends JFrame {
     private boolean clientShips = false;
     private boolean gameReadyToStart = false;
     private boolean isGameOver = false;
-    private String ServerIPAddress;
+    private String serverIPAddress;
+    private boolean carrierDead = false;
+    private boolean battleshipDead = false;
+    private boolean destroyerDead = false;
+    private boolean submarineDead = false;
+    private boolean patrolDead = false;
+
 
 
     public BattleshipDisplay() {
@@ -60,11 +66,12 @@ public class BattleshipDisplay extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!IPAddress.getText().equals("")) {
                     isClient = true;
-                    //ServerIPAddress = IPAddress.getText();
+                    serverIPAddress = IPAddress.getText();
                     getContentPane().setBackground(Color.gray);
                     loadBoard();
                 } else {
-                    ServerIPAddress = "localhost";
+                    isClient = true;
+                    serverIPAddress = "localhost";
                     getContentPane().setBackground(Color.gray);
                     loadBoard();
                 }
@@ -177,6 +184,8 @@ public class BattleshipDisplay extends JFrame {
                     bfgBottom.removeAllListeners();
                 } else {
                     assignRandomShipsButton.setVisible(false);
+                    shipsAreReadyButton.setVisible(false);
+                    bfgBottom.removeAllListeners();
                 }
             }
         });
@@ -242,7 +251,7 @@ public class BattleshipDisplay extends JFrame {
         if(isClient){
             client = new Client(messageBox, this);
             try {
-                client.runClient("fakeIP");
+                client.runClient(serverIPAddress);
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -347,7 +356,49 @@ public class BattleshipDisplay extends JFrame {
          */
 
         isGameOver = bfgBottom.isGameOver();
-
+        if(isClient){
+            if(5 == bfgBottom.carrierHits && !carrierDead){
+                client.send(SocketSignals.CARRIER_SUNK_SIGNAL, null, null);
+                carrierDead = true;
+            }
+            if(4 == bfgBottom.battleshipHits && !battleshipDead){
+                client.send(SocketSignals.BATTLESHIP_SUNK_SIGNAL, null, null);
+                battleshipDead = true;
+            }
+            if(3 == bfgBottom.destroyerHits && !destroyerDead){
+                client.send(SocketSignals.DESTROYER_SUNK_SIGNAL, null, null);
+                destroyerDead = true;
+            }
+            if(3 == bfgBottom.submarineHits && !submarineDead){
+                client.send(SocketSignals.SUBMARINE_SUNK_SIGNAL, null, null);
+                submarineDead = true;
+            }
+            if(2 == bfgBottom.patrolBoatHits && !patrolDead){
+                client.send(SocketSignals.PATROL_BOAT_SUNK_SIGNAL, null, null);
+                patrolDead = true;
+            }
+        } else {
+            if(5 == bfgBottom.carrierHits && !carrierDead){
+                server.send(SocketSignals.CARRIER_SUNK_SIGNAL, null, null);
+                carrierDead = true;
+            }
+            if(4 == bfgBottom.battleshipHits && !battleshipDead){
+                server.send(SocketSignals.BATTLESHIP_SUNK_SIGNAL, null, null);
+                battleshipDead = true;
+            }
+            if(3 == bfgBottom.destroyerHits && !destroyerDead){
+                server.send(SocketSignals.DESTROYER_SUNK_SIGNAL, null, null);
+                destroyerDead = true;
+            }
+            if(3 == bfgBottom.submarineHits && !submarineDead){
+                server.send(SocketSignals.SUBMARINE_SUNK_SIGNAL, null, null);
+                submarineDead = true;
+            }
+            if(2 == bfgBottom.patrolBoatHits && !patrolDead){
+                server.send(SocketSignals.PATROL_BOAT_SUNK_SIGNAL, null, null);
+                patrolDead = true;
+            }
+        }
         if(isGameOver){
             //you lost, opponent won
 
@@ -359,7 +410,7 @@ public class BattleshipDisplay extends JFrame {
 
             youLost();
 
-        }else{
+        }else {
             fireButton.setVisible(true);
         }
 
