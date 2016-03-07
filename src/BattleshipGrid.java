@@ -22,6 +22,7 @@ public class BattleshipGrid extends JPanel {
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
     public static boolean shipBeingDragged = false;
     public boolean needToAddShips;
+    public boolean clickable = true;
 
     Carrier c = new Carrier();
     Battleship b = new Battleship();
@@ -38,6 +39,10 @@ public class BattleshipGrid extends JPanel {
         add(new TestPane());
         setVisible(true);
         setOpaque(true);
+    }
+
+    public void removeAllListeners(){
+        shipMovingAdaptor.isClickable = false;
     }
 
     public boolean areShipsPlaced(){
@@ -156,23 +161,7 @@ public class BattleshipGrid extends JPanel {
                     if(!needToAddShips) {
                         changeSpaceSelection(e);
                     } else {
-                       // System.out.println("Checking for ship");
-//                        if (e.getX() <= gridSpaces[9][9].getX() + 50 && e.getY() <= 500) {
-//                            for (int i = 0; i < 10; i++) {
-//                                for (int j = 0; j < 10; j++) {
-//                                    if (e.getX() > gridSpaces[i][j].getX() && e.getX() < gridSpaces[i][j].getX() + 50) {
-//                                        if (e.getY() > gridSpaces[i][j].getY() && e.getY() < gridSpaces[i][j].getY() + 50) {
-//                                            if (gridSpaces[i][j].isShipHere) {
-//                                                //TODO ADD SHIP ROTATION LOL
-//                                                System.out.println("Calling rotate ship");
-//                                                //rotateShip(i, j);
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                            repaint();
-//                        }
+
                     }
                 }
 

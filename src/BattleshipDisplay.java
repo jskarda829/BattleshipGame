@@ -30,6 +30,7 @@ public class BattleshipDisplay extends JFrame {
     private boolean clientShips = false;
     private boolean gameReadyToStart = false;
     private boolean isGameOver = false;
+    private String ServerIPAddress;
 
 
     public BattleshipDisplay() {
@@ -59,6 +60,11 @@ public class BattleshipDisplay extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!IPAddress.getText().equals("")) {
                     isClient = true;
+                    //ServerIPAddress = IPAddress.getText();
+                    getContentPane().setBackground(Color.gray);
+                    loadBoard();
+                } else {
+                    ServerIPAddress = "localhost";
                     getContentPane().setBackground(Color.gray);
                     loadBoard();
                 }
@@ -168,6 +174,7 @@ public class BattleshipDisplay extends JFrame {
                     bfgBottom.pb.setVisible(false);
                     assignRandomShipsButton.setVisible(false);
                     shipsAreReadyButton.setVisible(false);
+                    bfgBottom.removeAllListeners();
                 } else {
                     assignRandomShipsButton.setVisible(false);
                 }
@@ -184,6 +191,7 @@ public class BattleshipDisplay extends JFrame {
                     shipsAreSet();
                     assignRandomShipsButton.setVisible(false);
                     shipsAreReadyButton.setVisible(false);
+                    bfgBottom.removeAllListeners();
                 }
             }
         });
@@ -234,7 +242,7 @@ public class BattleshipDisplay extends JFrame {
         if(isClient){
             client = new Client(messageBox, this);
             try {
-                client.runClient("fakeIP");//TODO set real ip from user
+                client.runClient("fakeIP");
             }catch(Exception e){
                 e.printStackTrace();
             }
