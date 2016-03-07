@@ -128,6 +128,16 @@ public class ClientReadRunnable implements Runnable {
                         System.out.println("set board after being called client");
                         battleshipDisplay.setBoardAfterGameOver();
                         */
+                    } else if(receiveMessage.equals(SocketSignals.CARRIER_SUNK_SIGNAL)){
+                        textBox.append("You've sunk the opponents Carrier!" + '\n');
+                    } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SUNK_SIGNAL)){
+                        textBox.append("You've sunk the opponents Battleship!" + '\n');
+                    } else if(receiveMessage.equals(SocketSignals.DESTROYER_SUNK_SIGNAL)) {
+                        textBox.append("You've sunk the opponents Destroyer!" + '\n');
+                    } else if(receiveMessage.equals(SocketSignals.SUBMARINE_SUNK_SIGNAL)) {
+                        textBox.append("You've sunk the opponents Submarine!" + '\n');
+                    } else if(receiveMessage.equals(SocketSignals.PATROL_BOAT_SUNK_SIGNAL)) {
+                        textBox.append("You've sunk the opponents Patrol Boat!" + '\n');
                     } else {
 
                             System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);

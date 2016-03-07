@@ -28,7 +28,7 @@ public class Client {
 
 
     public void runClient(String IPAddress) throws Exception {
-        sock = new Socket("localhost", 3000);
+        sock = new Socket(IPAddress, 3000);
         // reading from keyboard (keyRead object)
         keyRead = new BufferedReader(new InputStreamReader(System.in));
         // sending to client (pwrite object)
@@ -117,6 +117,21 @@ public class Client {
             pwrite.flush();
         } else if(signal.equals(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS)){
             pwrite.println(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS);
+            pwrite.flush();
+        } else if(signal.equals(SocketSignals.CARRIER_SUNK_SIGNAL)){
+            pwrite.println(SocketSignals.CARRIER_SUNK_SIGNAL);
+            pwrite.flush();
+        } else if(signal.equals(SocketSignals.BATTLESHIP_SUNK_SIGNAL)){
+            pwrite.println(SocketSignals.BATTLESHIP_SUNK_SIGNAL);
+            pwrite.flush();
+        } else if(signal.equals(SocketSignals.DESTROYER_SUNK_SIGNAL)){
+            pwrite.println(SocketSignals.DESTROYER_SUNK_SIGNAL);
+            pwrite.flush();
+        } else if(signal.equals(SocketSignals.SUBMARINE_SUNK_SIGNAL)){
+            pwrite.println(SocketSignals.SUBMARINE_SUNK_SIGNAL);
+            pwrite.flush();
+        } else if(signal.equals(SocketSignals.PATROL_BOAT_SUNK_SIGNAL)){
+            pwrite.println(SocketSignals.PATROL_BOAT_SUNK_SIGNAL);
             pwrite.flush();
         }
 

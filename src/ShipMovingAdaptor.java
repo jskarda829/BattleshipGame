@@ -147,7 +147,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
         if(isClickable) {
             if (SwingUtilities.isLeftMouseButton(e)) {
 
-            printBoard(1);
+                printBoard(1);
 
                 setBounds();
                 setShipsGone();
@@ -240,6 +240,7 @@ public class ShipMovingAdaptor extends MouseAdapter{
                 }
             }
         }
+
 
     }
 

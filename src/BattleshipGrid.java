@@ -22,7 +22,11 @@ public class BattleshipGrid extends JPanel {
     public Color COLOR_CELL_HAS_SHIP = Color.magenta;
     public static boolean shipBeingDragged = false;
     public boolean needToAddShips;
-    public boolean clickable = true;
+    public int carrierHits = 0;
+    public int battleshipHits = 0;
+    public int destroyerHits = 0;
+    public int submarineHits = 0;
+    public int patrolBoatHits = 0;
 
     Carrier c = new Carrier();
     Battleship b = new Battleship();
@@ -639,6 +643,7 @@ public class BattleshipGrid extends JPanel {
             whichShip = -1;
             shipPiece = -1;
             setIcon(null);
+            isShipVertical = true;
 
         }
 
@@ -681,6 +686,23 @@ public class BattleshipGrid extends JPanel {
         if(gridSpaces[row][col].getIsShipHere() == true){
             SocketSignals.playSound("sounds/missile_launch.wav");
             System.out.print("Your ship has been hit!");
+            switch(gridSpaces[row][col].getWhichShip()){
+                case SocketSignals.CARRIER_INT:
+                    carrierHits++;
+                    break;
+                case SocketSignals.BATTLESHIP_INT:
+                    battleshipHits++;
+                    break;
+                case SocketSignals.DESTROYER_INT:
+                    destroyerHits++;
+                    break;
+                case SocketSignals.SUBMARINE_INT:
+                    submarineHits++;
+                    break;
+                case SocketSignals.PATROL_BOAT_INT:
+                    patrolBoatHits++;
+                    break;
+            }
             gridSpaces[row][col].setIcon(null);
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
             gridSpaces[row][col].setIcon(new ImageIcon("pics/giphy.gif"));
@@ -729,6 +751,10 @@ public class BattleshipGrid extends JPanel {
 //        System.out.println("Game is over");
         return true;
     }
+
+//    private int getLastPiece(){
+//
+//    }
 
 }
 
