@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.Socket;
 import javax.swing.JFrame;
 
 /**
@@ -18,6 +17,7 @@ public class BattleshipDisplay extends JFrame {
     public JTextField IPAddress;
     public JButton assignRandomShipsButton;
     public JButton fireButton;
+    public JButton shipsAreReadyButton;
 
     //custom vars
     boolean isClient;
@@ -152,17 +152,37 @@ public class BattleshipDisplay extends JFrame {
             }
         });
 
+
         assignRandomShipsButton = new JButton("Random Ships");
-        assignRandomShipsButton.setBounds(880, 550, 160, 20);
+        assignRandomShipsButton.setBounds(790, 550, 160, 20);
         assignRandomShipsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //assign random ships
                 setRandomShips();
+                bfgBottom.c.setVisible(false);
+                bfgBottom.b.setVisible(false);
+                bfgBottom.s.setVisible(false);
+                bfgBottom.d.setVisible(false);
+                bfgBottom.pb.setVisible(false);
                 assignRandomShipsButton.setVisible(false);
+                shipsAreReadyButton.setVisible(false);
             }
         });
 
+        shipsAreReadyButton = new JButton("Ships Are Set");
+        shipsAreReadyButton.setBounds(940, 550, 160, 20);
+        shipsAreReadyButton.setVisible(true);
+        shipsAreReadyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (bfgBottom.areShipsPlaced()) {
+                    shipsAreSet();
+                    assignRandomShipsButton.setVisible(false);
+                    shipsAreReadyButton.setVisible(false);
+                }
+            }
+        });
         fireButton = new JButton();
         ImageIcon i = new ImageIcon("src/nuke_fire_100x100.jpg");
         fireButton.setIcon(i);
@@ -205,6 +225,7 @@ public class BattleshipDisplay extends JFrame {
         add(j);
         add(assignRandomShipsButton);
         add(fireButton);
+        add(shipsAreReadyButton);
 
         if(isClient){
             client = new Client(messageBox, this);
@@ -248,6 +269,19 @@ public class BattleshipDisplay extends JFrame {
         }
     }
 
+    public void shipsAreSet(){
+            //send ships ready signal
+        if(isClient){
+//               print("setRandomShips() ships assigned is true, isClient is trur");
+            client.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
+            clientShips = true;
+        } else {
+//               print("setRandomShips() ships assigned is true, isClient is false");
+            serverShips = true;
+            server.send(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET, null, null);
+            startGameIfReady();
+        }
+    }
 
 
 
