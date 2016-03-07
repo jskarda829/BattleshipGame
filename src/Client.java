@@ -39,8 +39,6 @@ public class Client {
         istream = sock.getInputStream();
         receiveRead = new BufferedReader(new InputStreamReader(istream));
 
-        System.out.println("Start the chitchat, type and press Enter key");
-
 
         //socket Threads
 

@@ -21,9 +21,6 @@ public class ClientReadRunnable implements Runnable {
 
     @Override
     public void run() {
-
-        System.out.println("Client Read thread running...");
-
         String receiveMessage;
 
         while (true){
@@ -35,9 +32,6 @@ public class ClientReadRunnable implements Runnable {
 
                     //server has read a socket code, need check what code it is
                     if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_CHAT)){
-
-                        System.out.println("message is inconming");
-
                         //now know that a chat message is coming
                         try {
                             if((receiveMessage = bufferedReader.readLine()) != null)
@@ -52,13 +46,11 @@ public class ClientReadRunnable implements Runnable {
 
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_SHIPS_ARE_SET)) {
 
-                        System.out.println("Opponent ships are set");
                         textBox.append("**_Opponent Ships are set_**\n");
 
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_READY_TO_START)) {
 
                         //print message to textbox then get vars ready for game
-
                         textBox.append("**_Game is starting_**\n");
                         battleshipDisplay.setGameReadyToStart(true);
 
@@ -66,7 +58,6 @@ public class ClientReadRunnable implements Runnable {
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_SHOT_CORDINATES_INCOMING)) {
 
                         //read 2 messages, row and col for a shot and then send those to the battseship display
-
                         textBox.append("**_Enemy shot incoming_**\n");
                         int rowShotAt, colShotAt;
 
@@ -81,7 +72,6 @@ public class ClientReadRunnable implements Runnable {
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_YOUR_TURN)) {
 
                         //its now your turn, call startTurn()
-
                         textBox.append("**_Your Turn_**\n");
                         battleshipDisplay.startTurn();
 
@@ -115,19 +105,12 @@ public class ClientReadRunnable implements Runnable {
 
                     }   else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_CHECK_SHIPS)){
                         if(battleshipDisplay.checkGameOver()){
-                            System.out.println("Game over being set client in runnable");
                             battleshipDisplay.setGameOver(true);
                             battleshipDisplay.client.send(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER, null, null);
                         }
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SIGNAL_GAME_OVER)){
                         //the opponent lost so you won
-
                         battleshipDisplay.youWon();
-
-                        /*
-                        System.out.println("set board after being called client");
-                        battleshipDisplay.setBoardAfterGameOver();
-                        */
                     } else if(receiveMessage.equals(SocketSignals.CARRIER_SUNK_SIGNAL)){
                         textBox.append("You've sunk the opponents Carrier!" + '\n');
                     } else if(receiveMessage.equals(SocketSignals.BATTLESHIP_SUNK_SIGNAL)){
@@ -140,12 +123,7 @@ public class ClientReadRunnable implements Runnable {
                         textBox.append("You've sunk the opponents Patrol Boat!" + '\n');
                     } else {
 
-                            System.out.println("Read something but its not a message, recieveMessage: " + receiveMessage);
-
                     }
-
-                   // textBox.append(receiveMessage + '\n');
-                    //System.out.println("The server says: " + receiveMessage);
                 }
 
             } catch (IOException e) {

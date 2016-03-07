@@ -20,9 +20,6 @@ public class ClientWriteRunnable implements Runnable {
 
     @Override
     public void run() {
-
-        System.out.println("Client write thread running...");
-
         String message;
         BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
 
