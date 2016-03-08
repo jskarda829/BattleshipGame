@@ -656,7 +656,7 @@ public class BattleshipGrid extends JPanel {
         //mark shot on your board
 
         if(gridSpaces[row][col].getIsShipHere() == true){
-            SocketSignals.playSound("sounds/missile_launch.wav");
+            SocketSignals.playSound("sounds/missile_launch.wav", false);
             switch(gridSpaces[row][col].getWhichShip()){
                 case SocketSignals.CARRIER_INT:
                     carrierHits++;
@@ -680,7 +680,7 @@ public class BattleshipGrid extends JPanel {
             gridSpaces[row][col].setIsDone(true);
             return true;
         }else{
-            SocketSignals.playSound("sounds/splash.wav");
+            SocketSignals.playSound("sounds/splash.wav", false);
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
             gridSpaces[row][col].setIcon(new ImageIcon("pics/x.jpg"));
             gridSpaces[row][col].setIsDone(true);
@@ -694,12 +694,13 @@ public class BattleshipGrid extends JPanel {
         //mark shot on opponents board
 
         if(hit == true){
-            SocketSignals.playSound("sounds/missile_launch.wav");
+            //SocketSignals.playSound("sounds/missile_launch.wav", false);
+            SocketSignals.playSound("sounds/epic_music.wav", false);
             gridSpaces[row][col].setIcon(null);
             gridSpaces[row][col].setIcon(new ImageIcon("pics/giphy.gif"));
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_HIT);
         }else{
-            SocketSignals.playSound("sounds/splash.wav");
+            SocketSignals.playSound("sounds/splash.wav", false);
             gridSpaces[row][col].setBackground(SocketSignals.BATTLESHIP_COLOR_SHIP_MISS);
             gridSpaces[row][col].setIcon(new ImageIcon("pics/x.jpg"));
         }

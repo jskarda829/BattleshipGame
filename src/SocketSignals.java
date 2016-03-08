@@ -41,7 +41,7 @@ public class SocketSignals {
     public static final int FOURTH_PIECE = 4;
     public static final int FIFTH_PIECE = 5;
 
-    public static void playSound(String soundName){
+    public static void playSound(String soundName, boolean isLooping){
 
 
         try
@@ -49,7 +49,12 @@ public class SocketSignals {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
-            clip.start();
+            if(isLooping) {
+                clip.start();
+                //clip.loop(Integer.MAX_VALUE);
+            }else{
+                clip.start();
+            }
         }
         catch(Exception ex)
         {

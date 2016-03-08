@@ -2,8 +2,10 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JFrame;
 import javax.swing.text.DefaultCaret;
 
@@ -97,6 +99,9 @@ public class BattleshipDisplay extends JFrame {
         remove(IPAddress);
         remove(hostButton);
         remove(clientButton);
+
+
+
 
         //Instantiate components
        // bfgBottom = new BattleshipGrid();
@@ -263,6 +268,8 @@ public class BattleshipDisplay extends JFrame {
         }
         repaint();
         pack();
+
+        //TODO SocketSignals.playSound("sounds/epic_music.mp3", false);
     }//close loadBoard()
 
     private void setRandomShips(){
@@ -498,11 +505,20 @@ public class BattleshipDisplay extends JFrame {
     }
 
     public void youWon(){
+        SocketSignals.playSound("sounds/winner_1.wav", false);
+        SocketSignals.playSound("sounds/victory_cheering.wav", false);
         messageBox.append("GAME OVER, YOU WIN" + '\n');
+        fireButton.setIcon(null);
+        fireButton.setText("YOU WIN!!");
+        fireButton.setVisible(true);
     }
 
     public void youLost(){
+        SocketSignals.playSound("sounds/game_over.wav", false);
         messageBox.append("GAME OVER, YOU LOST" + '\n');
+        fireButton.setIcon(null);
+        fireButton.setText("YOU LOSE!!");
+        fireButton.setVisible(true);
     }
 
 
